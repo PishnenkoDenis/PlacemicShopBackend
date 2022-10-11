@@ -25,10 +25,10 @@ async function bootstrap() {
   app.use(cookieParser());
 
   const config = new DocumentBuilder()
-    .setTitle('Battle peer')
-    .setDescription('The Battle peer API description')
+    .setTitle('Placemic shop')
+    .setDescription('The Placemic shop API description')
     .setVersion('1.0.0')
-    .addTag('battle-peer')
+    .addTag('placemic-shop')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/api/docs', app, document);
