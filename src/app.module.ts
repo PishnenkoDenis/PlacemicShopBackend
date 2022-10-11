@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { User } from './models/user.model';
 import { Token } from './models/token.model';
@@ -22,11 +24,18 @@ import { Shop } from './models/shop.model';
 import { SpecificationProduct } from './models/specificationproduct.model';
 import { SubCategory } from './models/subcategory.model';
 
+import { FooResolver } from './app.controllers';
+import { BasketModule } from './basket/basket.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
       isGlobal: true,
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -58,8 +67,9 @@ import { SubCategory } from './models/subcategory.model';
       ],
       autoLoadModels: true,
     }),
+    BasketModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [FooResolver],
 })
 export class AppModule {}

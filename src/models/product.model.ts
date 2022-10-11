@@ -7,6 +7,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { ObjectType, Field } from '@nestjs/graphql';
 
 import { Basket } from './basket.model';
 import { BrowsingHistory } from './browsinghistory.model';
@@ -30,8 +31,10 @@ interface ProductCreateAttributes {
   subCategoryId: number;
 }
 
+@ObjectType()
 @Table({ tableName: 'product' })
 export class Product extends Model<Product, ProductCreateAttributes> {
+  @Field()
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -41,6 +44,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   id: number;
 
+  @Field()
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -48,6 +52,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   title: string;
 
+  @Field()
   @Column({
     type: DataType.TEXT,
     allowNull: false,
@@ -55,6 +60,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   description: string;
 
+  @Field()
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -62,6 +68,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   prise: number;
 
+  @Field()
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
@@ -70,6 +77,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   isDelete: number;
 
+  @Field()
   @ForeignKey(() => Shop)
   @Column({
     type: DataType.INTEGER,
@@ -77,6 +85,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   shopId: number;
 
+  @Field()
   @ForeignKey(() => Order)
   @Column({
     type: DataType.INTEGER,
@@ -84,12 +93,16 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   orderId: number;
 
+  @Field()
   @ForeignKey(() => SubCategory)
   @Column({
     type: DataType.INTEGER,
     field: 'sub_category_id',
   })
   subCategoryId: number;
+
+  @HasMany(() => Basket)
+  Basket: Basket;
 
   @HasOne(() => SpecificationProduct)
   specificationProduct: SpecificationProduct;
@@ -108,7 +121,4 @@ export class Product extends Model<Product, ProductCreateAttributes> {
 
   @HasMany(() => OrderProduct)
   orderProduct: OrderProduct[];
-
-  @HasMany(() => Basket)
-  basket: Basket[];
 }

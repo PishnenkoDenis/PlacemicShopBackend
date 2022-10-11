@@ -16,7 +16,7 @@ interface CategoryCreateAttributes {
   shopId: number;
 }
 
-@Table({ tableName: 'Category' })
+@Table({ tableName: 'category' })
 export class Category extends Model<Category, CategoryCreateAttributes> {
   @Column({
     type: DataType.INTEGER,
