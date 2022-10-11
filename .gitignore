@@ -3,6 +3,7 @@
 /node_modules
 
 # Logs
+.history
 logs
 *.log
 npm-debug.log*
@@ -35,3 +36,13 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 .env
+.development.env
+.staging.env
+.production.env
+
+src/database/config.json
+src/database/config/config.json
+
+backups
+
+temp
