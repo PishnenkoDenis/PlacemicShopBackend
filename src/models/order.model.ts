@@ -42,7 +42,7 @@ export class Order extends Model<Order, OrderCreateAttribute> {
     type: DataType.INTEGER,
     field: 'user_id',
   })
-  UserId: number;
+  userId: number;
 
   @HasOne(() => PurchaseHistory)
   purchaseHistory: PurchaseHistory;
