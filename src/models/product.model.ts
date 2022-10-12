@@ -1,3 +1,4 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   DataType,
@@ -7,7 +8,6 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { ObjectType, Field } from '@nestjs/graphql';
 
 import { Basket } from './basket.model';
 import { BrowsingHistory } from './browsinghistory.model';

@@ -1,24 +1,24 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   DataType,
   HasMany,
   HasOne,
-  Table,
   Model,
+  Table,
 } from 'sequelize-typescript';
-import { ApiProperty } from '@nestjs/swagger';
 
-import { Token } from './token.model';
-import { Shop } from './shop.model';
 import { Basket } from './basket.model';
 import { BrowsingHistory } from './browsinghistory.model';
+import { Comment } from './comment.model';
 import { DeliveryAddress } from './deliveryaddress.model';
 import { FavoritesProduct } from './favoritesproduct.model';
 import { FavoritesShop } from './favoritesshop.model';
+import { Order } from './order.model';
 import { Password } from './password.model';
 import { PurchaseHistory } from './purchasehistory.model';
-import { Order } from './order.model';
-import { Comment } from './comment.model';
+import { Shop } from './shop.model';
+import { Token } from './token.model';
 
 interface UserCreationAttributes {
   fullName: string;

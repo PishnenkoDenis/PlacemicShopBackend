@@ -1,6 +1,7 @@
-import { Resolver, Query, Args, Int } from '@nestjs/graphql';
-import { BasketService } from './basket.service';
+import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+
 import { Basket } from '../models/basket.model';
+import { BasketService } from './basket.service';
 
 @Resolver(() => Basket)
 export class BasketResolver {
