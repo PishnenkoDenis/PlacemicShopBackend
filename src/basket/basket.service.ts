@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Basket } from '../models/basket.model';
+
 import { Product } from '../models/product.model';
+import { Basket } from './basket.model';
 
 @Injectable()
 export class BasketService {

@@ -8,10 +8,10 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { OrderProduct } from './orderproduct.model';
+import { OrderProduct } from './order-product.model';
 import { Payment } from './payment.model';
 import { Product } from './product.model';
-import { PurchaseHistory } from './purchasehistory.model';
+import { PurchaseHistory } from './purchase-history.model';
 import { User } from './user.model';
 
 interface OrderCreateAttribute {

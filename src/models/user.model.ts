@@ -1,24 +1,25 @@
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   DataType,
   HasMany,
   HasOne,
-  Table,
   Model,
+  Table,
 } from 'sequelize-typescript';
-import { ApiProperty } from '@nestjs/swagger';
 
-import { Token } from './token.model';
-import { Shop } from './shop.model';
-import { Basket } from './basket.model';
-import { BrowsingHistory } from './browsinghistory.model';
-import { DeliveryAddress } from './deliveryaddress.model';
-import { FavoritesProduct } from './favoritesproduct.model';
-import { FavoritesShop } from './favoritesshop.model';
-import { Password } from './password.model';
-import { PurchaseHistory } from './purchasehistory.model';
-import { Order } from './order.model';
+import { Basket } from '../basket/basket.model';
+import { FavoritesProduct } from '../favorites-product/favorites-product.model';
+import { BrowsingHistory } from './browsing-history.model';
 import { Comment } from './comment.model';
+import { DeliveryAddress } from './delivery-address.model';
+import { FavoritesShop } from './favorites-shop.model';
+import { Order } from './order.model';
+import { Password } from './password.model';
+import { PurchaseHistory } from './purchase-history.model';
+import { Shop } from './shop.model';
+import { Token } from './token.model';
 
 interface UserCreationAttributes {
   fullName: string;
@@ -30,9 +31,11 @@ interface UserCreationAttributes {
   address?: string;
 }
 
+@ObjectType()
 @Table({ tableName: 'user' })
 export class User extends Model<User, UserCreationAttributes> {
   @ApiProperty({ example: 1, description: 'Uniq id' })
+  @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -42,6 +45,7 @@ export class User extends Model<User, UserCreationAttributes> {
   id: number;
 
   @ApiProperty({ example: 'Ivan Ivanov', description: 'User full name' })
+  @Field()
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -53,6 +57,7 @@ export class User extends Model<User, UserCreationAttributes> {
   fullName: string;
 
   @ApiProperty({ example: 'ivan.ivanov@gmail.com', description: 'User email' })
+  @Field()
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -64,6 +69,7 @@ export class User extends Model<User, UserCreationAttributes> {
   })
   email: string;
 
+  @Field()
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -76,6 +82,7 @@ export class User extends Model<User, UserCreationAttributes> {
     example: '+1 999 88-77-666',
     description: 'User phone number',
   })
+  @Field()
   @Column({
     type: DataType.STRING,
     allowNull: true,
@@ -84,6 +91,7 @@ export class User extends Model<User, UserCreationAttributes> {
   phone: string;
 
   @ApiProperty({ description: 'User avatar' })
+  @Field()
   @Column({
     type: DataType.STRING,
     allowNull: true,
@@ -92,6 +100,7 @@ export class User extends Model<User, UserCreationAttributes> {
   avatar: string;
 
   @ApiProperty({ example: 'buyer', description: 'User role' })
+  @Field()
   @Column({
     type: DataType.STRING,
     allowNull: true,
@@ -103,6 +112,7 @@ export class User extends Model<User, UserCreationAttributes> {
     example: 'Rostovskaya oblast,Taganrog gorod, Krasnaya ulitsa, 1 dom',
     description: 'User address',
   })
+  @Field()
   @Column({
     type: DataType.STRING,
     allowNull: true,

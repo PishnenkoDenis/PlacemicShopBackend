@@ -1,3 +1,4 @@
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   BelongsTo,
   Column,
@@ -6,10 +7,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { ObjectType, Field, Int } from '@nestjs/graphql';
 
-import { Product } from './product.model';
-import { User } from './user.model';
+import { Product } from '../models/product.model';
+import { User } from '../models/user.model';
 
 interface BasketCreateAttributes {
   userId: number;
@@ -45,6 +45,7 @@ export class Basket extends Model<Basket, BasketCreateAttributes> {
   })
   productId: number;
 
+  @Field(() => User)
   @BelongsTo(() => User)
   user: User;
 

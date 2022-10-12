@@ -7,8 +7,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+
 import { Shop } from './shop.model';
-import { SubCategory } from './subcategory.model';
+import { SubCategory } from './sub-category.model';
 
 interface CategoryCreateAttributes {
   isDelete: boolean;
