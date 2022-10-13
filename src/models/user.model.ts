@@ -1,4 +1,3 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
@@ -9,15 +8,15 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { Basket } from '../basket/basket.model';
-import { FavoritesProduct } from '../favorites-product/favorites-product.model';
-import { BrowsingHistory } from './browsing-history.model';
+import { Basket } from './basket.model';
+import { BrowsingHistory } from './browsinghistory.model';
 import { Comment } from './comment.model';
-import { DeliveryAddress } from './delivery-address.model';
-import { FavoritesShop } from './favorites-shop.model';
+import { DeliveryAddress } from './deliveryaddress.model';
+import { FavoritesProduct } from './favoritesproduct.model';
+import { FavoritesShop } from './favoritesshop.model';
 import { Order } from './order.model';
 import { Password } from './password.model';
-import { PurchaseHistory } from './purchase-history.model';
+import { PurchaseHistory } from './purchasehistory.model';
 import { Shop } from './shop.model';
 import { Token } from './token.model';
 
