@@ -1,0 +1,47 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  fullName: String!
+  email: String!
+  birthday: String!
+  phone: String!
+  avatar: String!
+  role: String!
+  address: String!
+}
+
+type FavoritesProduct {
+  id: Int!
+  productId: Int!
+  userId: Int!
+  product: Product!
+  user: User!
+}
+
+type Product {
+  id: Int!
+  title: String!
+  description: String!
+  prise: Int!
+  isDelete: Int!
+  shopId: Int!
+  orderId: Int!
+  subCategoryId: Int!
+}
+
+type Basket {
+  id: Int!
+  userId: Int!
+  productId: Int!
+  user: User!
+  product: Product!
+}
+
+type Query {
+  sayHello: String!
+  basket(id: Int!): [Basket!]!
+  getFavoritesProduct(id: Int!): [FavoritesProduct!]!
+}

@@ -1,3 +1,4 @@
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   BelongsTo,
   Column,
@@ -7,19 +8,21 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { Product } from './product.model';
-import { User } from './user.model';
+import { Product } from '../models/product.model';
+import { User } from '../models/user.model';
 
 interface FavoritesProductCreateAttributes {
   productId: number;
   userId: number;
 }
 
+@ObjectType()
 @Table({ tableName: 'favorites_product' })
 export class FavoritesProduct extends Model<
   FavoritesProduct,
   FavoritesProductCreateAttributes
 > {
+  @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -29,6 +32,7 @@ export class FavoritesProduct extends Model<
   })
   id: number;
 
+  @Field(() => Int)
   @ForeignKey(() => Product)
   @Column({
     type: DataType.INTEGER,
@@ -36,6 +40,7 @@ export class FavoritesProduct extends Model<
   })
   productId: number;
 
+  @Field(() => Int)
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
@@ -43,9 +48,11 @@ export class FavoritesProduct extends Model<
   })
   userId: number;
 
+  @Field(() => Product)
   @BelongsTo(() => Product)
   product: Product;
 
+  @Field(() => User)
   @BelongsTo(() => User)
   user: User;
 }

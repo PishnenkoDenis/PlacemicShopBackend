@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
-import { Basket } from '../models/basket.model';
 import { Product } from '../models/product.model';
+import { Basket } from './basket.model';
 
 @Injectable()
 export class BasketService {
@@ -13,7 +13,7 @@ export class BasketService {
     private productRepository: typeof Product,
   ) {}
 
-  async findOne(id: number) {
+  async getBasketData(id: number) {
     const result = await this.basketRepository.findAll({
       where: { userId: id },
       include: [
@@ -22,7 +22,7 @@ export class BasketService {
         },
       ],
     });
-    if (result.length === 0) {
+    if (!result?.length) {
       throw new NotFoundException();
     }
     return result;
