@@ -13,7 +13,7 @@ export class BasketService {
     private productRepository: typeof Product,
   ) {}
 
-  async getDataBasket(id: number) {
+  async getBasketData(id: number) {
     const result = await this.basketRepository.findAll({
       where: { userId: id },
       include: [

@@ -15,7 +15,7 @@ export class FavoritesProductService {
     @InjectModel(FavoritesProduct)
     private favoritesProduct: typeof FavoritesProduct,
   ) {}
-  async getDataFavoriteProduct(id: number) {
+  async getFavoriteProductData(id: number) {
     const result = await this.favoritesProduct.findAll({
       where: { userId: id },
       include: [
