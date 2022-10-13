@@ -13,7 +13,7 @@ export class BasketService {
     private productRepository: typeof Product,
   ) {}
 
-  async findOne(id: number) {
+  async getDataBasket(id: number) {
     const result = await this.basketRepository.findAll({
       where: { userId: id },
       include: [
@@ -22,7 +22,7 @@ export class BasketService {
         },
       ],
     });
-    if (result.length === 0) {
+    if (!result?.length) {
       throw new NotFoundException();
     }
     return result;

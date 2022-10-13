@@ -10,7 +10,7 @@ export class FavoritesProductResolver {
   ) {}
 
   @Query(() => [FavoritesProduct], { name: 'getFavoritesProduct' })
-  gettingInformation(@Args('id', { type: () => Int }) id: number) {
-    return this.favoritesProductService.findOne(id);
+  async getDataFavoriteProduct(@Args('id', { type: () => Int }) id: number) {
+    return await this.favoritesProductService.getDataFavoriteProduct(id);
   }
 }

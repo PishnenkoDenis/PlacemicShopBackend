@@ -8,7 +8,7 @@ export class BasketResolver {
   constructor(private readonly basketService: BasketService) {}
 
   @Query(() => [Basket], { name: 'basket' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.basketService.findOne(id);
+  async getDataBasket(@Args('id', { type: () => Int }) id: number) {
+    return await this.basketService.getDataBasket(id);
   }
 }

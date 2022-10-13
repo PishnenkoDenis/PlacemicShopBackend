@@ -15,7 +15,7 @@ export class FavoritesProductService {
     @InjectModel(FavoritesProduct)
     private favoritesProduct: typeof FavoritesProduct,
   ) {}
-  async findOne(id: number) {
+  async getDataFavoriteProduct(id: number) {
     const result = await this.favoritesProduct.findAll({
       where: { userId: id },
       include: [
@@ -23,7 +23,7 @@ export class FavoritesProductService {
         { model: this.userRepository },
       ],
     });
-    if (result.length === 0) {
+    if (!result?.length) {
       throw new NotFoundException();
     }
     return result;
