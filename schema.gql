@@ -1,0 +1,22 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Float!
+  fullName: String!
+  email: String!
+  birthday: String!
+  phone: String!
+  avatar: String!
+  role: String!
+  address: String!
+}
+
+type Query {
+  sayHello: String!
+}
+
+type Mutation {
+  createUser: User!
+}
