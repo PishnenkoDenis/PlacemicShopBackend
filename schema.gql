@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type User {
-  id: Float!
+  id: Int!
   fullName: String!
   email: String!
   birthday: String!
@@ -13,10 +13,35 @@ type User {
   address: String!
 }
 
-type Query {
-  sayHello: String!
+type FavoritesProduct {
+  id: Int!
+  productId: Int!
+  userId: Int!
+  product: Product!
+  user: User!
 }
 
-type Mutation {
-  createUser: User!
+type Product {
+  id: Int!
+  title: String!
+  description: String!
+  prise: Int!
+  isDelete: Int!
+  shopId: Int!
+  orderId: Int!
+  subCategoryId: Int!
+}
+
+type Basket {
+  id: Int!
+  userId: Int!
+  productId: Int!
+  user: User!
+  product: Product!
+}
+
+type Query {
+  sayHello: String!
+  basket(id: Int!): [Basket!]!
+  getFavoritesProduct(id: Int!): [FavoritesProduct!]!
 }

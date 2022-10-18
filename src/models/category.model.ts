@@ -7,8 +7,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+
 import { Shop } from './shop.model';
-import { SubCategory } from './subcategory.model';
+import { SubCategory } from './sub-category.model';
 
 interface CategoryCreateAttributes {
   isDelete: boolean;
@@ -16,7 +17,7 @@ interface CategoryCreateAttributes {
   shopId: number;
 }
 
-@Table({ tableName: 'Category' })
+@Table({ tableName: 'category' })
 export class Category extends Model<Category, CategoryCreateAttributes> {
   @Column({
     type: DataType.INTEGER,

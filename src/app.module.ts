@@ -1,32 +1,43 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { SequelizeModule } from '@nestjs/sequelize';
 
-import { User } from './models/user.model';
-import { Token } from './models/token.model';
-import { Basket } from './models/basket.model';
-import { BrowsingHistory } from './models/browsinghistory.model';
+import { FooResolver } from './app.controllers';
+import { Basket } from './basket/basket.model';
+import { BasketModule } from './basket/basket.module';
+import { FavoritesProduct } from './favorites-product/favorites-product.model';
+import { FavoritesProductModule } from './favorites-product/favorites-product.module';
+import { BrowsingHistory } from './models/browsing-history.model';
 import { Category } from './models/category.model';
 import { Comment } from './models/comment.model';
-import { DeliveryAddress } from './models/deliveryaddress.model';
-import { FavoritesProduct } from './models/favoritesproduct.model';
-import { FavoritesShop } from './models/favoritesshop.model';
+import { DeliveryAddress } from './models/delivery-address.model';
+import { FavoritesShop } from './models/favorites-shop.model';
 import { Order } from './models/order.model';
-import { OrderProduct } from './models/orderproduct.model';
+import { OrderProduct } from './models/order-product.model';
 import { Password } from './models/password.model';
 import { Payment } from './models/payment.model';
 import { Product } from './models/product.model';
-import { ProductImage } from './models/productimage.model';
-import { PurchaseHistory } from './models/purchasehistory.model';
+import { ProductImage } from './models/product-image.model';
+import { PurchaseHistory } from './models/purchase-history.model';
 import { Shop } from './models/shop.model';
-import { SpecificationProduct } from './models/specificationproduct.model';
-import { SubCategory } from './models/subcategory.model';
+import { SpecificationProduct } from './models/specification-product.model';
+import { SubCategory } from './models/sub-category.model';
+import { Token } from './models/token.model';
+import { User } from './models/user.model';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
       isGlobal: true,
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'schema.gql',
+      cache: 'bounded',
+      playground: true,
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -58,8 +69,10 @@ import { SubCategory } from './models/subcategory.model';
       ],
       autoLoadModels: true,
     }),
+    BasketModule,
+    FavoritesProductModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [FooResolver],
 })
 export class AppModule {}

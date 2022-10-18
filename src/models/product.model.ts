@@ -1,3 +1,4 @@
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   DataType,
@@ -8,16 +9,16 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { Basket } from './basket.model';
-import { BrowsingHistory } from './browsinghistory.model';
+import { Basket } from '../basket/basket.model';
+import { FavoritesProduct } from '../favorites-product/favorites-product.model';
+import { BrowsingHistory } from './browsing-history.model';
 import { Comment } from './comment.model';
-import { FavoritesProduct } from './favoritesproduct.model';
 import { Order } from './order.model';
-import { OrderProduct } from './orderproduct.model';
-import { ProductImage } from './productimage.model';
+import { OrderProduct } from './order-product.model';
+import { ProductImage } from './product-image.model';
 import { Shop } from './shop.model';
-import { SpecificationProduct } from './specificationproduct.model';
-import { SubCategory } from './subcategory.model';
+import { SpecificationProduct } from './specification-product.model';
+import { SubCategory } from './sub-category.model';
 
 interface ProductCreateAttributes {
   title: string;
@@ -30,8 +31,10 @@ interface ProductCreateAttributes {
   subCategoryId: number;
 }
 
+@ObjectType()
 @Table({ tableName: 'product' })
 export class Product extends Model<Product, ProductCreateAttributes> {
+  @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -41,6 +44,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   id: number;
 
+  @Field()
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -48,6 +52,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   title: string;
 
+  @Field()
   @Column({
     type: DataType.TEXT,
     allowNull: false,
@@ -55,6 +60,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   description: string;
 
+  @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -62,6 +68,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   prise: number;
 
+  @Field(() => Int)
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
@@ -70,6 +77,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   isDelete: number;
 
+  @Field(() => Int)
   @ForeignKey(() => Shop)
   @Column({
     type: DataType.INTEGER,
@@ -77,6 +85,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   shopId: number;
 
+  @Field(() => Int)
   @ForeignKey(() => Order)
   @Column({
     type: DataType.INTEGER,
@@ -84,12 +93,16 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   orderId: number;
 
+  @Field(() => Int)
   @ForeignKey(() => SubCategory)
   @Column({
     type: DataType.INTEGER,
     field: 'sub_category_id',
   })
   subCategoryId: number;
+
+  @HasMany(() => Basket)
+  Basket: Basket;
 
   @HasOne(() => SpecificationProduct)
   specificationProduct: SpecificationProduct;
@@ -108,7 +121,4 @@ export class Product extends Model<Product, ProductCreateAttributes> {
 
   @HasMany(() => OrderProduct)
   orderProduct: OrderProduct[];
-
-  @HasMany(() => Basket)
-  basket: Basket[];
 }
