@@ -35,9 +35,8 @@ import { User } from './models/user.model';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: 'schema.gql',
+      autoSchemaFile: true,
       cache: 'bounded',
-      playground: true,
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
