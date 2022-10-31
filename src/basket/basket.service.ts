@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
+import { forbiddenError } from 'src/config';
 
 import { Product } from '../models/product.model';
 import { Basket } from './basket.model';
@@ -35,38 +36,26 @@ export class BasketService {
     return result;
   }
 
-  async addingToBasket(addItem: CreateBasketInput) {
+  async addToBasket(addItem: CreateBasketInput) {
     const availability = await this.basketRepository.findAll({
       where: {
         [Op.and]: { userId: addItem.userId, productId: addItem.productId },
       },
     });
     if (availability?.length) {
-      throw new HttpException(
-        {
-          status: HttpStatus.FORBIDDEN,
-          error: 'Item already added',
-        },
-        HttpStatus.FORBIDDEN,
-      );
+      forbiddenError();
     }
     return await this.basketRepository.create(addItem);
   }
 
-  async removeFromTrash(itemId: number) {
+  async removeFromBasket(itemId: number) {
     const availability = await this.basketRepository.findOne({
       where: {
         id: itemId,
       },
     });
     if (!availability) {
-      throw new HttpException(
-        {
-          status: HttpStatus.FORBIDDEN,
-          error: 'Item already added',
-        },
-        HttpStatus.FORBIDDEN,
-      );
+      forbiddenError();
     }
     await this.basketRepository.destroy({
       where: {

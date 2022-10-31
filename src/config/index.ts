@@ -1,5 +1,4 @@
-import { HttpStatus } from '@nestjs/common';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { ForbiddenException, HttpStatus } from '@nestjs/common';
 
 export enum ERoles {
   owner = 'OWNER',
@@ -51,3 +50,11 @@ export const serverResponseOK = {
   message: ServerMessages.OK,
   statusCode: HttpStatus.OK,
 };
+
+export function forbiddenError(message?: string) {
+  throw new ForbiddenException({
+    message: message || ServerMessages.FORBIDDEN,
+    error: message || ServerMessages.FORBIDDEN,
+    statusCode: HttpStatus.FORBIDDEN,
+  });
+}
