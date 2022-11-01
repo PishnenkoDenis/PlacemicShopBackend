@@ -12,7 +12,7 @@ import { OrderProduct } from './order-product.model';
 import { Payment } from './payment.model';
 import { Product } from './product.model';
 import { PurchaseHistory } from './purchase-history.model';
-import { User } from './user.model';
+import { User } from '../users/user.model';
 
 interface OrderCreateAttribute {
   price: string;

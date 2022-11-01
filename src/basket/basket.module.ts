@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Product } from 'src/models/product.model';
-import { User } from 'src/models/user.model';
+import { User } from 'src/users/user.model';
 
 import { Basket } from './basket.model';
 import { BasketResolver } from './basket.resolver';

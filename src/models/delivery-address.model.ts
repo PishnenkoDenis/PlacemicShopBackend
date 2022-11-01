@@ -8,7 +8,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { User } from './user.model';
+import { User } from '../users/user.model';
 
 interface DeliveryAddressCreateAttributes {
   city: string;

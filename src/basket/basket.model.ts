@@ -9,7 +9,7 @@ import {
 } from 'sequelize-typescript';
 
 import { Product } from '../models/product.model';
-import { User } from '../models/user.model';
+import { User } from '../users/user.model';
 
 interface BasketCreateAttributes {
   userId: number;
