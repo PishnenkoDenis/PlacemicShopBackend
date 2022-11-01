@@ -66,16 +66,16 @@ export class Product extends Model<Product, ProductCreateAttributes> {
     allowNull: false,
     field: 'prise',
   })
-  prise: number;
+  price: number;
 
   @Field(() => Int)
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
-    field: 'is_delete',
+    field: 'is_deleted',
   })
-  isDelete: number;
+  isDeleted: number;
 
   @Field(() => Int)
   @ForeignKey(() => Shop)
