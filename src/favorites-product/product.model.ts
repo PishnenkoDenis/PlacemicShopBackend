@@ -25,7 +25,7 @@ interface ProductCreateAttributes {
   description: string;
   price: number;
   rating: number;
-  isDelete: boolean;
+  isDeleted: boolean;
   shopId: number;
   orderId: number;
   subCategoryId: number;
@@ -73,9 +73,9 @@ export class Product extends Model<Product, ProductCreateAttributes> {
     type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
-    field: 'is_delete',
+    field: 'is_deleted',
   })
-  isDelete: number;
+  isDeleted: number;
 
   @Field(() => Int)
   @ForeignKey(() => Shop)

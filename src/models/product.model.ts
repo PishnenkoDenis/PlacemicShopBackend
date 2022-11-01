@@ -25,7 +25,7 @@ interface ProductCreateAttributes {
   description: string;
   price: number;
   rating: number;
-  isDelete: boolean;
+  isDeleted: boolean;
   shopId: number;
   orderId: number;
   subCategoryId: number;
