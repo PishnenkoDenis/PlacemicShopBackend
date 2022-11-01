@@ -23,7 +23,7 @@ import { SubCategory } from './sub-category.model';
 interface ProductCreateAttributes {
   title: string;
   description: string;
-  prise: number;
+  price: number;
   rating: number;
   isDelete: boolean;
   shopId: number;

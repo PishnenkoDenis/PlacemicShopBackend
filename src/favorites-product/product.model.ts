@@ -23,7 +23,7 @@ import { FavoritesProduct } from './favorites-product.model';
 interface ProductCreateAttributes {
   title: string;
   description: string;
-  prise: number;
+  price: number;
   rating: number;
   isDelete: boolean;
   shopId: number;
@@ -64,9 +64,9 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
-    field: 'prise',
+    field: 'price',
   })
-  prise: number;
+  price: number;
 
   @Field(() => Int)
   @Column({
