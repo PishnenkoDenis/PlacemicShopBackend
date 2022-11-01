@@ -64,7 +64,7 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
-    field: 'prise',
+    field: 'price',
   })
   price: number;
 
