@@ -10,15 +10,15 @@ import {
 } from 'sequelize-typescript';
 
 import { Basket } from '../basket/basket.model';
-import { FavoritesProduct } from '../favorites-product/favorites-product.model';
-import { BrowsingHistory } from './browsing-history.model';
-import { Comment } from './comment.model';
-import { Order } from './order.model';
-import { OrderProduct } from './order-product.model';
-import { ProductImage } from './product-image.model';
-import { Shop } from './shop.model';
-import { SpecificationProduct } from './specification-product.model';
-import { SubCategory } from './sub-category.model';
+import { BrowsingHistory } from '../models/browsing-history.model';
+import { Comment } from '../models/comment.model';
+import { Order } from '../models/order.model';
+import { OrderProduct } from '../models/order-product.model';
+import { ProductImage } from '../models/product-image.model';
+import { Shop } from '../models/shop.model';
+import { SpecificationProduct } from '../models/specification-product.model';
+import { SubCategory } from '../models/sub-category.model';
+import { FavoritesProduct } from './favorites-product.model';
 
 interface ProductCreateAttributes {
   title: string;

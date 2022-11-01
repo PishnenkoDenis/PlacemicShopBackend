@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 import { FooResolver } from './app.controllers';
+import { AuthModule } from './auth/auth.module';
 import { Basket } from './basket/basket.model';
 import { BasketModule } from './basket/basket.module';
 import { FavoritesProduct } from './favorites-product/favorites-product.model';
@@ -16,7 +17,6 @@ import { DeliveryAddress } from './models/delivery-address.model';
 import { FavoritesShop } from './models/favorites-shop.model';
 import { Order } from './models/order.model';
 import { OrderProduct } from './models/order-product.model';
-import { Password } from './models/password.model';
 import { Payment } from './models/payment.model';
 import { Product } from './models/product.model';
 import { ProductImage } from './models/product-image.model';
@@ -24,8 +24,10 @@ import { PurchaseHistory } from './models/purchase-history.model';
 import { Shop } from './models/shop.model';
 import { SpecificationProduct } from './models/specification-product.model';
 import { SubCategory } from './models/sub-category.model';
-import { Token } from './models/token.model';
-import { User } from './models/user.model';
+import { Password } from './users/password.model';
+import { Token } from './users/token.model';
+import { User } from './users/user.model';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -70,6 +72,8 @@ import { User } from './models/user.model';
     }),
     BasketModule,
     FavoritesProductModule,
+    UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [FooResolver],

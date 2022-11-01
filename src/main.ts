@@ -35,7 +35,7 @@ async function bootstrap() {
 
   await app.listen(PORT, ADDRESS, () => {
     console.log(`Server started on http://localhost:${PORT}${API_PREFIX}`);
-    console.log(`API docs on http://localhost:${PORT}${API_PREFIX}/docs`);
+    console.log(`GraphQL playground on http://localhost:${PORT}/graphql`);
   });
 }
 

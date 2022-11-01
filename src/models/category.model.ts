@@ -12,7 +12,7 @@ import { Shop } from './shop.model';
 import { SubCategory } from './sub-category.model';
 
 interface CategoryCreateAttributes {
-  isDelete: boolean;
+  isDeleted: boolean;
   type: string;
   shopId: number;
 }
@@ -32,9 +32,9 @@ export class Category extends Model<Category, CategoryCreateAttributes> {
     type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
-    field: 'is_delete',
+    field: 'd',
   })
-  isDelete: boolean;
+  isDeleted: boolean;
 
   @Column({
     type: DataType.STRING,

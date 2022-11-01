@@ -12,7 +12,7 @@ import { Category } from './category.model';
 import { Comment } from './comment.model';
 import { FavoritesShop } from './favorites-shop.model';
 import { Product } from './product.model';
-import { User } from './user.model';
+import { User } from '../users/user.model';
 
 interface ShopCreateAttributes {
   title: string;

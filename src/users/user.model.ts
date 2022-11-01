@@ -9,25 +9,26 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Basket } from 'src/basket/basket.model';
+import { ERoles } from 'src/config';
 
 import { FavoritesProduct } from '../favorites-product/favorites-product.model';
-import { BrowsingHistory } from './browsing-history.model';
-import { Comment } from './comment.model';
-import { DeliveryAddress } from './delivery-address.model';
-import { FavoritesShop } from './favorites-shop.model';
-import { Order } from './order.model';
+import { BrowsingHistory } from '../models/browsing-history.model';
+import { Comment } from '../models/comment.model';
+import { DeliveryAddress } from '../models/delivery-address.model';
+import { FavoritesShop } from '../models/favorites-shop.model';
+import { Order } from '../models/order.model';
+import { PurchaseHistory } from '../models/purchase-history.model';
+import { Shop } from '../models/shop.model';
 import { Password } from './password.model';
-import { PurchaseHistory } from './purchase-history.model';
-import { Shop } from './shop.model';
 import { Token } from './token.model';
 
 interface UserCreationAttributes {
   fullName: string;
   email: string;
-  birthday: string;
+  birthday: Date;
   phone?: string;
   avatar?: string;
-  role?: string;
+  role?: ERoles;
   address?: string;
 }
 

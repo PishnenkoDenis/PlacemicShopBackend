@@ -8,7 +8,7 @@ import {
 } from 'sequelize-typescript';
 
 import { Product } from './product.model';
-import { User } from './user.model';
+import { User } from '../users/user.model';
 
 interface BrowsingHistoryCreateAttributes {
   viewingDate: string;

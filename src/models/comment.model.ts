@@ -9,7 +9,7 @@ import {
 
 import { Product } from './product.model';
 import { Shop } from './shop.model';
-import { User } from './user.model';
+import { User } from '../users/user.model';
 
 interface CommentCreateAttribute {
   description?: string;
