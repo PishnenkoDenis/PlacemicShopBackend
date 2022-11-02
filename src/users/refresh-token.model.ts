@@ -10,13 +10,13 @@ import {
 import { User } from './user.model';
 
 interface TokenCreateAttributes {
-  expiresIn: string;
+  expiresAt: number;
   refresh: string;
   userId: number;
 }
 
-@Table({ tableName: 'token' })
-export class Token extends Model<Token, TokenCreateAttributes> {
+@Table({ tableName: 'refresh_token' })
+export class RefreshToken extends Model<RefreshToken, TokenCreateAttributes> {
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -31,7 +31,7 @@ export class Token extends Model<Token, TokenCreateAttributes> {
     allowNull: false,
     field: 'expires_in',
   })
-  expiresIn: string;
+  expiresAt: string;
 
   @Column({
     type: DataType.STRING,

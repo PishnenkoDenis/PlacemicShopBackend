@@ -25,7 +25,7 @@ import { Shop } from './models/shop.model';
 import { SpecificationProduct } from './models/specification-product.model';
 import { SubCategory } from './models/sub-category.model';
 import { Password } from './users/password.model';
-import { Token } from './users/token.model';
+import { RefreshToken } from './users/refresh-token.model';
 import { User } from './users/user.model';
 import { UsersModule } from './users/users.module';
 
@@ -66,7 +66,7 @@ import { UsersModule } from './users/users.module';
         Shop,
         SpecificationProduct,
         SubCategory,
-        Token,
+        RefreshToken,
       ],
       autoLoadModels: true,
     }),
