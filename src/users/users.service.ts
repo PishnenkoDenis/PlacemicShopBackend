@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
 import { Transaction } from 'sequelize';
 
+import { UserPasswordParamsInterface } from './interfaces/create-password.interface';
 import { Password } from './password.model';
 
 @Injectable()
@@ -13,15 +14,15 @@ export class UsersService {
   ) {}
 
   async createPassword(
-    createPasswordDto: { userId: number; password: string },
+    passwordParam: UserPasswordParamsInterface,
     transaction?: Transaction,
   ): Promise<Password> {
-    const hash = await bcrypt.hash(createPasswordDto.password, 10);
+    const hash = await bcrypt.hash(passwordParam.password, 10);
 
     return this.passwordRepository.create(
       {
         hash,
-        userId: createPasswordDto.userId,
+        userId: passwordParam.userId,
       },
       {
         transaction,
