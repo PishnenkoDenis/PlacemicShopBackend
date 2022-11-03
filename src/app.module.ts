@@ -28,6 +28,7 @@ import { Password } from './users/password.model';
 import { RefreshToken } from './users/refresh-token.model';
 import { User } from './users/user.model';
 import { UsersModule } from './users/users.module';
+import { UserSecretModule } from './user-secret/user-secret.module';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { UsersModule } from './users/users.module';
     FavoritesProductModule,
     UsersModule,
     AuthModule,
+    UserSecretModule,
   ],
   controllers: [],
   providers: [FooResolver],

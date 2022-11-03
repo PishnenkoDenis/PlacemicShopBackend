@@ -9,16 +9,18 @@ import {
 
 import { User } from './user.model';
 
-interface PasswordCreationAttributes {
-  hash: string;
+interface UserSecretCreationAttributes {
   userId: number;
+  secret: string;
 }
 
-@Table({ tableName: 'password' })
-export class Password extends Model<Password, PasswordCreationAttributes> {
+@Table({ tableName: 'user_secret' })
+export class UserSecret extends Model<
+  UserSecret,
+  UserSecretCreationAttributes
+> {
   @Column({
     type: DataType.INTEGER,
-    allowNull: true,
     unique: true,
     autoIncrement: true,
     primaryKey: true,
@@ -28,15 +30,11 @@ export class Password extends Model<Password, PasswordCreationAttributes> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
   })
-  hash: string;
-
-  @ForeignKey(() => User)
-  @Column({
-    type: DataType.INTEGER,
-    field: 'user_id',
-  })
-  userId: number;
+  secret: string;
 
   @Column({
     type: DataType.BOOLEAN,
@@ -46,6 +44,14 @@ export class Password extends Model<Password, PasswordCreationAttributes> {
   })
   isDeleted: boolean;
 
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+    field: 'user_id',
+  })
+  userId: number;
+
   @BelongsTo(() => User)
-  user: User;
+  users: User;
 }
