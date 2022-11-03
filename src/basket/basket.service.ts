@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { forbiddenError } from 'src/config';
 
-import { Product } from '../models/product.model';
+import { Product } from '../product/product.model';
 import { Basket } from './basket.model';
 import { CreateBasketInput } from './dto/create-basket.input';
 

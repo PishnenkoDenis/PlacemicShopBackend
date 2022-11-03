@@ -18,7 +18,7 @@ import { FavoritesShop } from './models/favorites-shop.model';
 import { Order } from './models/order.model';
 import { OrderProduct } from './models/order-product.model';
 import { Payment } from './models/payment.model';
-import { Product } from './models/product.model';
+import { Product } from './product/product.model';
 import { ProductImage } from './models/product-image.model';
 import { PurchaseHistory } from './models/purchase-history.model';
 import { Shop } from './models/shop.model';
@@ -28,6 +28,7 @@ import { Password } from './users/password.model';
 import { Token } from './users/token.model';
 import { User } from './users/user.model';
 import { UsersModule } from './users/users.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { UsersModule } from './users/users.module';
     FavoritesProductModule,
     UsersModule,
     AuthModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [FooResolver],
