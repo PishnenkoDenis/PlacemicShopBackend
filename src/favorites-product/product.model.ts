@@ -68,14 +68,14 @@ export class Product extends Model<Product, ProductCreateAttributes> {
   })
   price: number;
 
-  @Field(() => Int)
+  @Field()
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
     field: 'is_deleted',
   })
-  isDeleted: number;
+  isDeleted: boolean;
 
   @Field(() => Int)
   @ForeignKey(() => Shop)

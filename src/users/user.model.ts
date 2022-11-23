@@ -20,7 +20,7 @@ import { Order } from '../models/order.model';
 import { PurchaseHistory } from '../models/purchase-history.model';
 import { Shop } from '../models/shop.model';
 import { Password } from './password.model';
-import { Token } from './token.model';
+import { RefreshToken } from './refresh-token.model';
 
 interface UserCreationAttributes {
   fullName: string;
@@ -121,11 +121,20 @@ export class User extends Model<User, UserCreationAttributes> {
   })
   address: string;
 
+  @Field()
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+    field: 'is_deleted',
+  })
+  isDeleted: boolean;
+
   @HasOne(() => Password)
   password: Password;
 
-  @HasOne(() => Token)
-  refresh: Token;
+  @HasOne(() => RefreshToken)
+  refresh: RefreshToken;
 
   @HasMany(() => BrowsingHistory)
   browsingHistory: BrowsingHistory[];

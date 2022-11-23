@@ -9,16 +9,17 @@ import {
 
 import { User } from './user.model';
 
-interface PasswordCreationAttributes {
-  hash: string;
+interface TokenCreateAttributes {
+  expiresAt: number;
+  refresh: string;
   userId: number;
 }
 
-@Table({ tableName: 'password' })
-export class Password extends Model<Password, PasswordCreationAttributes> {
+@Table({ tableName: 'refresh_token' })
+export class RefreshToken extends Model<RefreshToken, TokenCreateAttributes> {
   @Column({
     type: DataType.INTEGER,
-    allowNull: true,
+    allowNull: false,
     unique: true,
     autoIncrement: true,
     primaryKey: true,
@@ -28,8 +29,16 @@ export class Password extends Model<Password, PasswordCreationAttributes> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    field: 'expires_in',
   })
-  hash: string;
+  expiresAt: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    field: 'refresh',
+  })
+  refresh: string;
 
   @ForeignKey(() => User)
   @Column({
@@ -37,14 +46,6 @@ export class Password extends Model<Password, PasswordCreationAttributes> {
     field: 'user_id',
   })
   userId: number;
-
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-    field: 'is_deleted',
-  })
-  isDeleted: boolean;
 
   @BelongsTo(() => User)
   user: User;

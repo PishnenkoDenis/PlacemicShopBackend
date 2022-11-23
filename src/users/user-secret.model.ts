@@ -9,17 +9,18 @@ import {
 
 import { User } from './user.model';
 
-interface TokenCreateAttributes {
-  expiresIn: string;
-  refresh: string;
+interface UserSecretCreationAttributes {
   userId: number;
+  secret: string;
 }
 
-@Table({ tableName: 'token' })
-export class Token extends Model<Token, TokenCreateAttributes> {
+@Table({ tableName: 'user_secret' })
+export class UserSecret extends Model<
+  UserSecret,
+  UserSecretCreationAttributes
+> {
   @Column({
     type: DataType.INTEGER,
-    allowNull: false,
     unique: true,
     autoIncrement: true,
     primaryKey: true,
@@ -29,24 +30,28 @@ export class Token extends Model<Token, TokenCreateAttributes> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    field: 'expires_in',
+    validate: {
+      notEmpty: true,
+    },
   })
-  expiresIn: string;
+  secret: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.BOOLEAN,
     allowNull: false,
-    field: 'refresh',
+    defaultValue: false,
+    field: 'is_deleted',
   })
-  refresh: string;
+  isDeleted: boolean;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
+    allowNull: false,
     field: 'user_id',
   })
   userId: number;
 
   @BelongsTo(() => User)
-  user: User;
+  users: User;
 }
