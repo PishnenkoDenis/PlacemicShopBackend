@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Product } from 'src/models/product.model';
+import { Product } from 'src/product/product.model';
 import { User } from 'src/users/user.model';
 
 import { FavoritesProduct } from './favorites-product.model';

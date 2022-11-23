@@ -7,7 +7,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { Product } from './product.model';
+import { Product } from '../product/product.model';
 import { User } from '../users/user.model';
 
 interface BrowsingHistoryCreateAttributes {
