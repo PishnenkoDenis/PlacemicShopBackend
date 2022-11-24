@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { User } from 'src/users/user.model';
 
 import { AuthService } from './auth.service';
@@ -13,7 +13,7 @@ export class AuthResolver {
   ) {}
 
   @Mutation(() => User)
-  async createUser(dto: CreateUserDto): Promise<string> {
+  async createUser(@Args('dto') dto: CreateUserDto): Promise<string> {
     return await this.authService.createUser(dto);
   }
 }
