@@ -6,9 +6,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { Product } from 'src/product/product.model';
 
 import { User } from '../users/user.model';
-import { Product } from './product.model';
 import { Shop } from './shop.model';
 
 interface CommentCreateAttribute {

@@ -7,8 +7,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { Shop } from './shop.model';
 import { User } from '../users/user.model';
+import { Shop } from './shop.model';
 
 interface FavoritesShopCreateAttributes {
   shopeId: number;

@@ -32,35 +32,6 @@ export class UsersService {
     private refreshTokenRepository: typeof RefreshToken,
   ) {}
 
-  async getOrCreateUserSecret(userId: number) {
-    const secretRecord = await this.passwordRepository.findOne({
-      attributes: ['hash', 'userId'],
-      where: {
-        userId,
-        isDeleted: false,
-      },
-    });
-
-    if (!secretRecord) {
-      return await this.createUserSecret(userId);
-    }
-
-    return secretRecord.hash;
-  }
-
-  async compareSecret(userId: number, hash: string) {
-    const secretRecord = await this.passwordRepository.findOne({
-      attributes: ['hash', 'userId'],
-      where: {
-        userId,
-        hash,
-        isDeleted: false,
-      },
-    });
-
-    return Boolean(secretRecord);
-  }
-
   async createPassword(
     passwordParam: UserPasswordParamsInterface,
     transaction?: Transaction,
@@ -76,6 +47,15 @@ export class UsersService {
         transaction,
       },
     );
+  }
+
+  async deleteRefreshToken(refresh: string, transaction?: Transaction) {
+    return await this.refreshTokenRepository.destroy({
+      where: {
+        refresh,
+      },
+      transaction,
+    });
   }
 
   async getUserById(id: number, params?: TDefaultParams) {

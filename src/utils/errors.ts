@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  HttpException,
   HttpStatus,
   UnauthorizedException,
   UnprocessableEntityException,
@@ -51,4 +52,8 @@ export function badRequestError(message?: string) {
     error: message || ServerMessages.BAD_REQUEST,
     statusCode: HttpStatus.BAD_REQUEST,
   });
+}
+
+export function expiredTokenError() {
+  throw new HttpException('TOKEN_EXPIRED', HttpStatus.UNAUTHORIZED);
 }

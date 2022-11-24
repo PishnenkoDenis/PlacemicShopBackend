@@ -1,9 +1,10 @@
-import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { AuthService } from "src/auth/auth.service";
-import { ERoles, forbiddenError } from "src/config";
-import { UsersService } from "src/users/users.service";
-import { unauthorizedError } from "src/utils/errors";
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from 'src/auth/auth.service';
+import { ERoles, forbiddenError } from 'src/config';
+import { UserSecretService } from 'src/user-secret/user-secret.service';
+import { UsersService } from 'src/users/users.service';
+import { expiredTokenError, unauthorizedError } from 'src/utils/errors';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -42,8 +43,7 @@ export class JwtAuthGuard implements CanActivate {
         unauthorizedError();
       }
 
-      req.user = await this.usersService.getAndValidateUser(user.id, {
-        minified: true,
+      req.user = await this.usersService.validateUser(user.id, {
         where: {
           isDeleted: false,
         },
