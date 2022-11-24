@@ -1,3 +1,4 @@
+import { Field, InputType } from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmpty,
@@ -8,15 +9,18 @@ import {
 
 import { VALID_PASSWORD_REGEXP } from '../../config';
 
+@InputType()
 export class LoginViaEmailDto {
   @IsNotEmpty({ message: 'Email required' })
   @IsString({ message: 'Email should be string' })
   @MaxLength(255, { message: 'Email is too long' })
   @IsEmail({}, { message: 'Invalid email' })
+  @Field(() => String)
   readonly email: string;
 
   @IsNotEmpty({ message: 'Password required' })
   @IsString({ message: 'Password should be string' })
   @Matches(VALID_PASSWORD_REGEXP, { message: 'Invalid password' })
+  @Field(() => String)
   readonly password: string;
 }

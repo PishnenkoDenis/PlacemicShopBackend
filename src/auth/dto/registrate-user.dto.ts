@@ -1,3 +1,4 @@
+import { Field, InputType } from '@nestjs/graphql';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
@@ -11,24 +12,28 @@ import {
 
 import { ERoles, VALID_PASSWORD_REGEXP } from '../../config';
 
+@InputType()
 export class CreateUserDto {
   @ApiProperty({ example: 'jhon.doe@gmail.com', description: 'User email' })
   @IsString({ message: 'Email should be string' })
   @IsNotEmpty({ message: 'Email required' })
   @MaxLength(255, { message: 'Email is too long' })
   @IsEmail({}, { message: 'Invalid email' })
+  @Field(() => String)
   readonly email: string;
 
   @ApiProperty({ example: 'Jhon Doe', description: 'User full name' })
   @IsNotEmpty({ message: 'Full name required' })
   @IsString({ message: 'Invalid full name' })
   @MaxLength(255, { message: 'Full name is too long' })
+  @Field(() => String)
   readonly fullName: string;
 
   @ApiProperty({ example: 'Password_1', description: 'User password' })
   @IsNotEmpty({ message: 'Password required' })
   @IsString({ message: 'Password should be string' })
   @Matches(VALID_PASSWORD_REGEXP, { message: 'Invalid password' })
+  @Field(() => String)
   readonly password: string;
 
   @ApiPropertyOptional({
@@ -38,17 +43,19 @@ export class CreateUserDto {
   @IsOptional()
   @IsPhoneNumber()
   @IsString({ message: 'Phone number should be string' })
+  @Field(() => String)
   readonly phone?: string;
 
   @ApiPropertyOptional({
     description: `Admin birthday. Ex.: ${new Date('01.01.1970')}`,
   })
   @IsOptional()
+  @Field(() => Date)
   readonly birthday?: Date;
 
   @ApiPropertyOptional({
     description: `User role`,
   })
-  @IsOptional()
-  readonly role?: ERoles;
+  @Field()
+  readonly role: ERoles;
 }

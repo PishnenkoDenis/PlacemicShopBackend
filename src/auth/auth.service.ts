@@ -5,7 +5,11 @@ import { Envs, ERoles, ServerMessages } from 'src/config';
 import { UserSecretService } from 'src/user-secret/user-secret.service';
 import { User } from 'src/users/user.model';
 import { UsersService } from 'src/users/users.service';
-import { forbiddenError } from 'src/utils/errors';
+import {
+  expiredTokenError,
+  forbiddenError,
+  unauthorizedError,
+} from 'src/utils/errors';
 
 import { LoginViaEmailDto } from './dto/login-via-email.dto';
 import { CreateUserDto } from './dto/registrate-user.dto';
@@ -143,5 +147,48 @@ export class AuthService {
     await this.userService.createPassword({ userId: userRecord.id, password });
 
     return ServerMessages.CREATED;
+  }
+
+  async refresh(res: ResponseType, prevTokens) {
+    const userData = await this.validateRefreshToken(prevTokens.refresh);
+    const isValidUserSecret = await this.userSecretService.compareSecret(
+      userData.id,
+      userData.secret,
+    );
+
+    if (!isValidUserSecret) {
+      this.clearTokens(res);
+      await this.userService.deleteRefreshToken(prevTokens.refresh);
+
+      unauthorizedError();
+    }
+
+    const userRecord = await this.userService.getUserById(userData.id, {
+      where: {
+        isDeleted: false,
+      },
+    });
+    const secret = await this.userSecretService.getOrCreateUserSecret(
+      userRecord.id,
+    );
+    const tokens = await this.generateTokens(userRecord, secret);
+    await this.userService.deleteRefreshToken(prevTokens.refresh);
+    await this.userService.createRefreshToken(userRecord.id, tokens.refresh);
+
+    return tokens;
+  }
+
+  private async validateRefreshToken(refresh: string) {
+    try {
+      return this.jwtService.verify(refresh, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        expiredTokenError();
+      }
+
+      unauthorizedError();
+    }
   }
 }

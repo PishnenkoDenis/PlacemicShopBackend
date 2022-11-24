@@ -28,7 +28,7 @@ interface UserCreationAttributes {
   birthday: Date;
   phone?: string;
   avatar?: string;
-  role?: ERoles;
+  role: ERoles;
   address?: string;
 }
 
@@ -104,7 +104,7 @@ export class User extends Model<User, UserCreationAttributes> {
   @Field()
   @Column({
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
     field: 'role',
   })
   role: string;
