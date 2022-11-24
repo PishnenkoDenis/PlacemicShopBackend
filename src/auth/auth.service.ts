@@ -2,10 +2,12 @@ import { Body, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { Envs, ERoles, ServerMessages } from 'src/config';
+import { UserSecretService } from 'src/user-secret/user-secret.service';
 import { User } from 'src/users/user.model';
 import { UsersService } from 'src/users/users.service';
 import { forbiddenError } from 'src/utils/errors';
 
+import { LoginViaEmailDto } from './dto/login-via-email.dto';
 import { CreateUserDto } from './dto/registrate-user.dto';
 
 export interface ITokens {
@@ -39,14 +41,13 @@ export class AuthService {
     private userRepository: typeof User,
     private userService: UsersService,
     private jwtService: JwtService,
+    private userSecretService: UserSecretService,
   ) {}
 
-  async login(
-    @Body() user: LoginViaEmailDto,
-  ) {
-    const userRecord = await this.validateUser(user);
+  async login(@Body() user: LoginViaEmailDto) {
+    const userRecord = await this.validateUser(user.email);
 
-    const secret = await this.userPasswordService.getOrCreateUserSecret(
+    const secret = await this.userSecretService.getOrCreateUserSecret(
       userRecord.id,
     );
     const tokens = await this.generateTokens(userRecord, secret);

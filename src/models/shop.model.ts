@@ -7,12 +7,12 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { Product } from 'src/product/product.model';
 
+import { User } from '../users/user.model';
 import { Category } from './category.model';
 import { Comment } from './comment.model';
 import { FavoritesShop } from './favorites-shop.model';
-import { Product } from './product.model';
-import { User } from '../users/user.model';
 
 interface ShopCreateAttributes {
   title: string;
