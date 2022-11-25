@@ -45,6 +45,7 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "eslint-plugin-simple-import-sort": "^8.0.0",
+    "fastify": "^4.10.2",
     "graphql": "^16.6.0",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",

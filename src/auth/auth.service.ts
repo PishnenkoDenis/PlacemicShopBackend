@@ -1,13 +1,17 @@
 import { Body, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
-import { Envs, ERoles, ServerMessages } from 'src/config';
+import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
+import { Envs, ERoles } from 'src/config';
 import { UserSecretService } from 'src/user-secret/user-secret.service';
+import { Password } from 'src/users/password.model';
 import { User } from 'src/users/user.model';
 import { UsersService } from 'src/users/users.service';
 import {
   expiredTokenError,
   forbiddenError,
+  invalidDataError,
   unauthorizedError,
 } from 'src/utils/errors';
 
@@ -43,13 +47,35 @@ export class AuthService {
   constructor(
     @InjectModel(User)
     private userRepository: typeof User,
+    @InjectModel(Password)
+    private passwordRepository: typeof Password,
     private userService: UsersService,
     private jwtService: JwtService,
     private userSecretService: UserSecretService,
   ) {}
 
   async login(@Body() user: LoginViaEmailDto) {
-    const userRecord = await this.validateUser(user.email);
+    const userRecord = await this.userRepository.findOne({
+      where: {
+        email: user.email,
+      },
+    });
+
+    if (!userRecord) {
+      invalidDataError();
+    }
+
+    const passwordRecord = await this.passwordRepository.findOne({
+      where: {
+        userId: userRecord.id,
+      },
+    });
+
+    const match = await bcrypt.compare(user.password, passwordRecord.hash);
+
+    if (!match) {
+      unauthorizedError();
+    }
 
     const secret = await this.userSecretService.getOrCreateUserSecret(
       userRecord.id,
@@ -57,20 +83,20 @@ export class AuthService {
     const tokens = await this.generateTokens(userRecord, secret);
     await this.userService.createRefreshToken(userRecord.id, tokens.refresh);
 
-    return tokens;
+    return { tokens, userRecord };
   }
 
-  clearTokens(res: ResponseType) {
+  clearTokens(res: Response) {
     this.setTokens(res, null, 0);
   }
 
-  setTokens(res, tokens?: ITokens, date?: number) {
+  setTokens(context, tokens?: ITokens, date?: number) {
     const expiresAccess =
       date ?? Date.now() + Number(process.env.JWT_ACCESS_EXPIRES_IN) * 1000;
     const expiresRefresh =
       date ?? Date.now() + Number(process.env.JWT_REFRESH_EXPIRES_IN) * 1000;
 
-    res
+    context.res
       .cookie('access_token', tokens?.access, {
         httpOnly: true,
         path: '/',
@@ -107,17 +133,19 @@ export class AuthService {
       id: user.id,
     };
 
+    const access = this.jwtService.sign(accessPayload, {
+      expiresIn: Date.now() + Number(process.env.JWT_ACCESS_EXPIRES_IN) * 1000,
+      secret: `${process.env.JWT_ACCESS_SECRET}`,
+    });
+
+    const refresh = this.jwtService.sign(refreshPayload, {
+      expiresIn: Date.now() + Number(process.env.JWT_REFRESH_EXPIRES_IN) * 1000,
+      secret: `${process.env.JWT_REFRESH_SECRET}`,
+    });
+
     return {
-      access: this.jwtService.sign(accessPayload, {
-        expiresIn:
-          Date.now() + Number(process.env.JWT_ACCESS_EXPIRES_IN) * 1000,
-        secret: process.env.JWT_ACCESS_SECRET,
-      }),
-      refresh: this.jwtService.sign(refreshPayload, {
-        expiresIn:
-          Date.now() + Number(process.env.JWT_REFRESH_EXPIRES_IN) * 1000,
-        secret: process.env.JWT_REFRESH_SECRET,
-      }),
+      access,
+      refresh,
     };
   }
 
@@ -135,21 +163,24 @@ export class AuthService {
     return userRecord;
   }
 
-  async createUser(dto: CreateUserDto): Promise<string> {
+  async createUser(dto: CreateUserDto): Promise<User> {
     const { password, ...userParams } = dto;
 
-    await this.validateUser(userParams.email);
+    await this.validateUser(dto.email);
 
     const userRecord = await this.userRepository.create({
       ...userParams,
     });
 
-    await this.userService.createPassword({ userId: userRecord.id, password });
+    await this.userService.createPassword({
+      userId: userRecord.id,
+      password: password,
+    });
 
-    return ServerMessages.CREATED;
+    return userRecord;
   }
 
-  async refresh(res: ResponseType, prevTokens) {
+  async refresh(res: Response, prevTokens) {
     const userData = await this.validateRefreshToken(prevTokens.refresh);
     const isValidUserSecret = await this.userSecretService.compareSecret(
       userData.id,

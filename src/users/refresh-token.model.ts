@@ -34,7 +34,7 @@ export class RefreshToken extends Model<RefreshToken, TokenCreateAttributes> {
   expiresAt: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.STRING(1234),
     allowNull: false,
     field: 'refresh',
   })

@@ -43,14 +43,14 @@ export class CreateUserDto {
   @IsOptional()
   @IsPhoneNumber()
   @IsString({ message: 'Phone number should be string' })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   readonly phone?: string;
 
   @ApiPropertyOptional({
     description: `Admin birthday. Ex.: ${new Date('01.01.1970')}`,
   })
   @IsOptional()
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   readonly birthday?: Date;
 
   @ApiPropertyOptional({

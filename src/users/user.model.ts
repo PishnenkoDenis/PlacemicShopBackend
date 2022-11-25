@@ -23,9 +23,9 @@ import { Password } from './password.model';
 import { RefreshToken } from './refresh-token.model';
 
 interface UserCreationAttributes {
-  fullName: string;
+  fullName?: string;
   email: string;
-  birthday: Date;
+  birthday?: Date;
   phone?: string;
   avatar?: string;
   role: ERoles;
@@ -46,7 +46,7 @@ export class User extends Model<User, UserCreationAttributes> {
   id: number;
 
   @ApiProperty({ example: 'Ivan Ivanov', description: 'User full name' })
-  @Field()
+  @Field(() => String)
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -58,7 +58,7 @@ export class User extends Model<User, UserCreationAttributes> {
   fullName: string;
 
   @ApiProperty({ example: 'ivan.ivanov@gmail.com', description: 'User email' })
-  @Field()
+  @Field(() => String)
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -70,38 +70,38 @@ export class User extends Model<User, UserCreationAttributes> {
   })
   email: string;
 
-  @Field()
+  @Field(() => Date, { nullable: true })
   @Column({
-    type: DataType.STRING,
-    allowNull: false,
-    unique: true,
+    type: DataType.DATE,
+    allowNull: true,
     field: 'birthday',
   })
-  birthday: string;
+  birthday?: Date;
 
   @ApiProperty({
     example: '+1 999 88-77-666',
     description: 'User phone number',
   })
-  @Field()
+  @Field(() => String, { nullable: true })
   @Column({
     type: DataType.STRING,
     allowNull: true,
+    defaultValue: '',
     field: 'phone',
   })
-  phone: string;
+  phone?: string;
 
   @ApiProperty({ description: 'User avatar' })
-  @Field()
+  @Field(() => String, { nullable: true })
   @Column({
     type: DataType.STRING,
     allowNull: true,
     field: 'avatar',
   })
-  avatar: string;
+  avatar?: string;
 
   @ApiProperty({ example: 'buyer', description: 'User role' })
-  @Field()
+  @Field(() => String)
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -113,22 +113,22 @@ export class User extends Model<User, UserCreationAttributes> {
     example: 'Rostovskaya oblast,Taganrog gorod, Krasnaya ulitsa, 1 dom',
     description: 'User address',
   })
-  @Field()
+  @Field(() => String, { nullable: true })
   @Column({
     type: DataType.STRING,
     allowNull: true,
     field: 'address',
   })
-  address: string;
+  address?: string;
 
-  @Field()
+  @Field(() => Boolean, { nullable: true })
   @Column({
     type: DataType.BOOLEAN,
-    allowNull: false,
+    allowNull: true,
     defaultValue: false,
     field: 'is_deleted',
   })
-  isDeleted: boolean;
+  isDeleted?: boolean;
 
   @HasOne(() => Password)
   password: Password;

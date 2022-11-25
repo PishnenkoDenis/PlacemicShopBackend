@@ -40,11 +40,11 @@ export class Password extends Model<Password, PasswordCreationAttributes> {
 
   @Column({
     type: DataType.BOOLEAN,
-    allowNull: false,
+    allowNull: true,
     defaultValue: false,
     field: 'is_deleted',
   })
-  isDeleted: boolean;
+  isDeleted?: boolean;
 
   @BelongsTo(() => User)
   user: User;
