@@ -23,7 +23,7 @@ import { Password } from './password.model';
 import { RefreshToken } from './refresh-token.model';
 
 interface UserCreationAttributes {
-  fullName?: string;
+  fullName: string;
   email: string;
   birthday?: Date;
   phone?: string;
