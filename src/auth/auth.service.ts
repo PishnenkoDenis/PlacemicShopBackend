@@ -55,35 +55,26 @@ export class AuthService {
   ) {}
 
   async login(@Body() user: LoginViaEmailDto) {
-    const userRecord = await this.userRepository.findOne({
-      where: {
-        email: user.email,
-      },
-    });
+    const userRecord = await this.validateUser(user.email);
 
     if (!userRecord) {
-      invalidDataError();
-    }
-
-    const passwordRecord = await this.passwordRepository.findOne({
-      where: {
-        userId: userRecord.id,
-      },
-    });
-
-    const match = await bcrypt.compare(user.password, passwordRecord.hash);
-
-    if (!match) {
       unauthorizedError();
     }
 
-    const secret = await this.userSecretService.getOrCreateUserSecret(
-      userRecord.id,
-    );
-    const tokens = await this.generateTokens(userRecord, secret);
-    await this.userService.createRefreshToken(userRecord.id, tokens.refresh);
+    const comparedPassword = await this.validatePassword(user, userRecord.id);
 
-    return { tokens, userRecord };
+    if (userRecord && comparedPassword) {
+      const secret = await this.userSecretService.getOrCreateUserSecret(
+        userRecord.id,
+      );
+      const tokens = await this.generateTokens(userRecord, secret);
+      await this.userService.createRefreshToken(userRecord.id, tokens.refresh);
+
+      console.log(userRecord);
+      return { tokens, userRecord };
+    }
+
+    unauthorizedError();
   }
 
   clearTokens(res: Response) {
@@ -151,22 +142,32 @@ export class AuthService {
 
   async validateUser(email: string): Promise<User> {
     const userRecord = await this.userRepository.findOne({
-      attributes: ['email', 'id'],
       where: {
         email: email,
       },
     });
-    if (userRecord) {
-      forbiddenError();
-    }
 
     return userRecord;
+  }
+
+  async validatePassword(user: LoginViaEmailDto, id: number) {
+    const passwordRecord = await this.passwordRepository.findOne({
+      where: {
+        userId: id,
+      },
+    });
+
+    return bcrypt.compare(user.password, passwordRecord.hash);
   }
 
   async createUser(dto: CreateUserDto): Promise<User> {
     const { password, ...userParams } = dto;
 
-    await this.validateUser(dto.email);
+    const candidate = await this.validateUser(dto.email);
+
+    if (candidate) {
+      forbiddenError('User with that email already exists');
+    }
 
     const userRecord = await this.userRepository.create({
       ...userParams,

@@ -29,7 +29,6 @@ export class AuthResolver {
   ) {
     const { tokens, userRecord } = await this.authService.login(user);
     this.authService.setTokens(context, tokens);
-
     return userRecord;
   }
 
