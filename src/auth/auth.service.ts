@@ -11,7 +11,6 @@ import { UsersService } from 'src/users/users.service';
 import {
   expiredTokenError,
   forbiddenError,
-  invalidDataError,
   unauthorizedError,
 } from 'src/utils/errors';
 
@@ -70,7 +69,6 @@ export class AuthService {
       const tokens = await this.generateTokens(userRecord, secret);
       await this.userService.createRefreshToken(userRecord.id, tokens.refresh);
 
-      console.log(userRecord);
       return { tokens, userRecord };
     }
 
@@ -150,14 +148,14 @@ export class AuthService {
     return userRecord;
   }
 
-  async validatePassword(user: LoginViaEmailDto, id: number) {
+  async validatePassword(user: LoginViaEmailDto, id: number): Promise<boolean> {
     const passwordRecord = await this.passwordRepository.findOne({
       where: {
         userId: id,
       },
     });
 
-    return bcrypt.compare(user.password, passwordRecord.hash);
+    return await bcrypt.compare(user.password, passwordRecord.hash);
   }
 
   async createUser(dto: CreateUserDto): Promise<User> {

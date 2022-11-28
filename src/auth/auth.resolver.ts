@@ -8,7 +8,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { Response } from 'express';
-import { Envs, serverResponseOK } from 'src/config';
+import { serverResponseOK } from 'src/config';
 import { User } from 'src/users/user.model';
 
 import { AuthService } from './auth.service';

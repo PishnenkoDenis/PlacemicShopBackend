@@ -72,7 +72,6 @@ import { UsersModule } from './users/users.module';
         RefreshToken,
       ],
       autoLoadModels: true,
-      synchronize: true,
     }),
     BasketModule,
     FavoritesProductModule,
