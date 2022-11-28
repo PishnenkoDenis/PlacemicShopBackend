@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UserSecretModule } from 'src/user-secret/user-secret.module';
 import { UserSecretService } from 'src/user-secret/user-secret.service';
+import { Password } from 'src/users/password.model';
 import { User } from 'src/users/user.model';
 import { UsersModule } from 'src/users/users.module';
 
@@ -15,7 +16,7 @@ import { AuthService } from './auth.service';
   imports: [
     forwardRef(() => UsersModule),
     UserSecretModule,
-    SequelizeModule.forFeature([User]),
+    SequelizeModule.forFeature([User, Password]),
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),

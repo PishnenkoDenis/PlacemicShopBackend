@@ -7,8 +7,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-import { Order } from './order.model';
 import { Product } from '../product/product.model';
+import { Order } from './order.model';
 
 interface OrderProductCreateAttribute {
   orderId: number;
