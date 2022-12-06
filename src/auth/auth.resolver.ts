@@ -1,4 +1,4 @@
-import { Inject, Req, Res } from '@nestjs/common';
+import { Inject, Req, Res, UnprocessableEntityException } from '@nestjs/common';
 import {
   Args,
   Context,
@@ -45,6 +45,11 @@ export class AuthResolver {
 
   @Mutation(() => User)
   async createUser(@Args('dto') dto: CreateUserDto): Promise<User> {
+    if (!dto.email && !dto.phone) {
+      throw new UnprocessableEntityException(
+        'Email and phone fields not found',
+      );
+    }
     return await this.authService.createUser(dto);
   }
 }

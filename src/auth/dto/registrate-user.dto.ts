@@ -14,13 +14,16 @@ import { ERoles, VALID_PASSWORD_REGEXP } from '../../config';
 
 @InputType()
 export class CreateUserDto {
-  @ApiProperty({ example: 'jhon.doe@gmail.com', description: 'User email' })
+  @ApiProperty({
+    example: 'jhon.doe@gmail.com',
+    description: 'User email',
+  })
   @IsString({ message: 'Email should be string' })
-  @IsNotEmpty({ message: 'Email required' })
   @MaxLength(255, { message: 'Email is too long' })
   @IsEmail({}, { message: 'Invalid email' })
-  @Field(() => String)
-  readonly email: string;
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  readonly email?: string;
 
   @ApiProperty({ example: 'Jhon Doe', description: 'User full name' })
   @IsNotEmpty({ message: 'Full name required' })
@@ -36,7 +39,7 @@ export class CreateUserDto {
   @Field(() => String)
   readonly password: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     example: '+1 900 999 99 99',
     description: 'User phone number. Ex.: +1 900 999 99 99',
   })

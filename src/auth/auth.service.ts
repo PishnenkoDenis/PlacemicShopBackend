@@ -1,4 +1,4 @@
-import { Body, Injectable } from '@nestjs/common';
+import { Body, ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
@@ -8,11 +8,7 @@ import { UserSecretService } from 'src/user-secret/user-secret.service';
 import { Password } from 'src/users/password.model';
 import { User } from 'src/users/user.model';
 import { UsersService } from 'src/users/users.service';
-import {
-  expiredTokenError,
-  forbiddenError,
-  unauthorizedError,
-} from 'src/utils/errors';
+import { expiredTokenError, unauthorizedError } from 'src/utils/errors';
 
 import { LoginViaEmailDto } from './dto/login-via-email.dto';
 import { CreateUserDto } from './dto/registrate-user.dto';
@@ -54,7 +50,7 @@ export class AuthService {
   ) {}
 
   async login(@Body() user: LoginViaEmailDto) {
-    const userRecord = await this.validateUser(user.email);
+    const userRecord = await this.validateUser(user.email, user.phone);
 
     if (!userRecord) {
       unauthorizedError();
@@ -138,11 +134,11 @@ export class AuthService {
     };
   }
 
-  async validateUser(email: string): Promise<User> {
+  async validateUser(email?: string, phone?: string): Promise<User> {
     const userRecord = await this.userRepository.findOne({
-      attributes: ['role', 'email', 'id'],
+      attributes: ['role', 'email', 'phone', 'id'],
       where: {
-        email: email,
+        ...(email ? { email } : { phone }),
       },
     });
 
@@ -163,10 +159,10 @@ export class AuthService {
   async createUser(dto: CreateUserDto): Promise<User> {
     const { password, ...userParams } = dto;
 
-    const candidate = await this.validateUser(dto.email);
+    const candidate = await this.validateUser(dto.email, dto.phone);
 
     if (candidate) {
-      forbiddenError('User with that email already exists');
+      throw new ForbiddenException('User already exists');
     }
 
     const userRecord = await this.userRepository.create({
