@@ -1,4 +1,4 @@
-import { Body, ForbiddenException, Injectable } from '@nestjs/common';
+import { Body, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
@@ -8,7 +8,11 @@ import { UserSecretService } from 'src/user-secret/user-secret.service';
 import { Password } from 'src/users/password.model';
 import { User } from 'src/users/user.model';
 import { UsersService } from 'src/users/users.service';
-import { expiredTokenError, unauthorizedError } from 'src/utils/errors';
+import {
+  expiredTokenError,
+  forbiddenError,
+  unauthorizedError,
+} from 'src/utils/errors';
 
 import { LoginViaEmailDto } from './dto/login-via-email.dto';
 import { CreateUserDto } from './dto/registrate-user.dto';
@@ -162,7 +166,7 @@ export class AuthService {
     const candidate = await this.validateUser(dto.email, dto.phone);
 
     if (candidate) {
-      throw new ForbiddenException('User already exists');
+      forbiddenError('User already exists');
     }
 
     const userRecord = await this.userRepository.create({

@@ -12,14 +12,12 @@ import { VALID_PASSWORD_REGEXP } from '../../config';
 
 @InputType()
 export class LoginViaEmailDto {
-  // @IsNotEmpty({ message: 'Email required' })
   @IsString({ message: 'Email should be string' })
   @MaxLength(255, { message: 'Email is too long' })
   @IsEmail({}, { message: 'Invalid email' })
   @Field(() => String)
   readonly email?: string;
 
-  // @IsNotEmpty({ message: 'Phone required' })
   @IsPhoneNumber()
   @IsString({ message: 'Phone number should be string' })
   @Field(() => String, { nullable: true })
