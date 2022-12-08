@@ -140,7 +140,7 @@ export class AuthService {
 
   async validateUser(email?: string, phone?: string): Promise<User> {
     const userRecord = await this.userRepository.findOne({
-      attributes: ['role', 'email', 'phone', 'id'],
+      attributes: ['role', 'fullName', 'email', 'phone', 'id'],
       where: {
         ...(email ? { email } : { phone }),
       },

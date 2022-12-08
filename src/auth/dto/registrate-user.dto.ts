@@ -8,7 +8,9 @@ import {
   IsString,
   Matches,
   MaxLength,
+  ValidateIf,
 } from 'class-validator';
+import { User } from 'src/users/user.model';
 
 import { ERoles, VALID_PASSWORD_REGEXP } from '../../config';
 
@@ -20,6 +22,7 @@ export class CreateUserDto {
   })
   @IsString({ message: 'Email should be string' })
   @MaxLength(255, { message: 'Email is too long' })
+  @IsNotEmpty({ message: 'Email required' })
   @IsEmail({}, { message: 'Invalid email' })
   @Field(() => String, { nullable: true })
   @IsOptional()
@@ -43,6 +46,8 @@ export class CreateUserDto {
     example: '+1 900 999 99 99',
     description: 'User phone number. Ex.: +1 900 999 99 99',
   })
+  @ValidateIf((user: User) => Boolean(user.email))
+  @IsNotEmpty({ message: 'Phone required' })
   @IsOptional()
   @IsPhoneNumber()
   @IsString({ message: 'Phone number should be string' })
