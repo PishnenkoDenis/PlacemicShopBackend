@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { forbiddenError } from 'src/config';
 
 import { Discount } from './discount.model';
 import { CreateDiscountDto } from './dto/create-discount.dto';
@@ -38,6 +37,7 @@ export class DiscountService {
 
   async update(itemId: number, dto: CreateDiscountDto) {
     const model = await this.discountRepository.findOne({
+      attributes: ['id', 'discountName', 'procent', 'condition'],
       where: { id: itemId },
     });
 
