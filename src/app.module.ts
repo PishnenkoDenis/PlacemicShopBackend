@@ -8,6 +8,8 @@ import { FooResolver } from './app.controllers';
 import { AuthModule } from './auth/auth.module';
 import { Basket } from './basket/basket.model';
 import { BasketModule } from './basket/basket.module';
+import { Discount } from './discount/discount.model';
+import { DiscountModule } from './discount/discount.module';
 import { FavoritesProduct } from './favorites-product/favorites-product.model';
 import { FavoritesProductModule } from './favorites-product/favorites-product.module';
 import { BrowsingHistory } from './models/browsing-history.model';
@@ -70,6 +72,7 @@ import { UsersModule } from './users/users.module';
         SpecificationProduct,
         SubCategory,
         RefreshToken,
+        Discount,
       ],
       autoLoadModels: true,
     }),
@@ -79,6 +82,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     UserSecretModule,
     ProductModule,
+    DiscountModule,
   ],
   controllers: [],
   providers: [FooResolver],
