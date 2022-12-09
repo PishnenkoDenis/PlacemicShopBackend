@@ -30,6 +30,7 @@ import { Password } from './users/password.model';
 import { RefreshToken } from './users/refresh-token.model';
 import { User } from './users/user.model';
 import { UsersModule } from './users/users.module';
+import {DiscountM}
 
 @Module({
   imports: [
