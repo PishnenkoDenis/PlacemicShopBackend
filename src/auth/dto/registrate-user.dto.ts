@@ -8,19 +8,25 @@ import {
   IsString,
   Matches,
   MaxLength,
+  ValidateIf,
 } from 'class-validator';
+import { User } from 'src/users/user.model';
 
 import { ERoles, VALID_PASSWORD_REGEXP } from '../../config';
 
 @InputType()
 export class CreateUserDto {
-  @ApiProperty({ example: 'jhon.doe@gmail.com', description: 'User email' })
+  @ApiProperty({
+    example: 'jhon.doe@gmail.com',
+    description: 'User email',
+  })
   @IsString({ message: 'Email should be string' })
-  @IsNotEmpty({ message: 'Email required' })
   @MaxLength(255, { message: 'Email is too long' })
+  @IsNotEmpty({ message: 'Email required' })
   @IsEmail({}, { message: 'Invalid email' })
-  @Field(() => String)
-  readonly email: string;
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  readonly email?: string;
 
   @ApiProperty({ example: 'Jhon Doe', description: 'User full name' })
   @IsNotEmpty({ message: 'Full name required' })
@@ -36,10 +42,12 @@ export class CreateUserDto {
   @Field(() => String)
   readonly password: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     example: '+1 900 999 99 99',
     description: 'User phone number. Ex.: +1 900 999 99 99',
   })
+  @ValidateIf((user: User) => Boolean(user.email))
+  @IsNotEmpty({ message: 'Phone required' })
   @IsOptional()
   @IsPhoneNumber()
   @IsString({ message: 'Phone number should be string' })

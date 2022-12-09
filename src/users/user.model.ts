@@ -58,17 +58,17 @@ export class User extends Model<User, UserCreationAttributes> {
   fullName: string;
 
   @ApiProperty({ example: 'ivan.ivanov@gmail.com', description: 'User email' })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
     validate: {
       isEmail: true,
     },
     unique: true,
     field: 'email',
   })
-  email: string;
+  email?: string;
 
   @Field(() => Date, { nullable: true })
   @Column({
