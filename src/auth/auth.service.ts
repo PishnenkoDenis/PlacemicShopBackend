@@ -54,7 +54,7 @@ export class AuthService {
   ) {}
 
   async login(@Body() user: LoginViaEmailDto) {
-    const userRecord = await this.validateUser(user.email);
+    const userRecord = await this.validateUser(user.email, user.phone);
 
     if (!userRecord) {
       unauthorizedError();
@@ -138,11 +138,11 @@ export class AuthService {
     };
   }
 
-  async validateUser(email: string): Promise<User> {
+  async validateUser(email?: string, phone?: string): Promise<User> {
     const userRecord = await this.userRepository.findOne({
-      attributes: ['role', 'email', 'id', 'fullName'],
+      attributes: ['role', 'fullName', 'email', 'phone', 'id'],
       where: {
-        email: email,
+        ...(email ? { email } : { phone }),
       },
     });
 
@@ -163,10 +163,10 @@ export class AuthService {
   async createUser(dto: CreateUserDto): Promise<User> {
     const { password, ...userParams } = dto;
 
-    const candidate = await this.validateUser(dto.email);
+    const candidate = await this.validateUser(dto.email, dto.phone);
 
     if (candidate) {
-      forbiddenError('User with that email already exists');
+      forbiddenError('User already exists');
     }
 
     const userRecord = await this.userRepository.create({
