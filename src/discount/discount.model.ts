@@ -39,14 +39,14 @@ export class Discount extends Model<Discount, DiscountCreateAttributes> {
   })
   discountName: string;
 
-  @ApiProperty({ example: '10%', description: 'Discount procent' })
+  @ApiProperty({ example: '10%', description: 'Discount percent' })
   @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
-    field: 'procent',
+    field: 'percent',
   })
-  procent: number;
+  percent: number;
 
   @ApiProperty({ example: '100', description: 'Discount condition' })
   @Field(() => Int)
