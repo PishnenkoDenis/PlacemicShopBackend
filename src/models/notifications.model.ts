@@ -13,10 +13,8 @@ import { Shop } from './shop.model';
 
 interface NotificationCreateAttributes {
   type?: string;
-  orders?: boolean;
-  messages?: boolean;
-  news?: boolean;
-  shopId: number;
+  selected_list?: string[];
+  shop_id: number;
 }
 
 @ObjectType()
@@ -39,41 +37,27 @@ export class Notifications extends Model<
   @ApiProperty({ example: 'push', description: 'Notification type' })
   @Field(() => String, { nullable: true })
   @Column({
-    type: DataType.STRING,
+    type: DataType.ENUM({ values: ['email', 'push', 'telephone'] }),
     allowNull: true,
     field: 'type',
   })
   type?: string;
 
-  @ApiProperty({ example: true, description: 'Allow order notifications' })
-  @Field(() => Boolean, { nullable: true })
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: false,
-    field: 'orders',
+  @ApiProperty({
+    example: ['orders', 'news'],
+    description: 'Allowed notifications list',
   })
-  orders?: boolean;
-
-  @ApiProperty({ example: true, description: 'Allow messages notifications' })
-  @Field(() => Boolean, { nullable: true })
+  @Field(() => [String], { nullable: true })
   @Column({
-    type: DataType.BOOLEAN,
+    type: DataType.ARRAY(
+      DataType.ENUM({
+        values: ['orders', 'messages', 'news'],
+      }),
+    ),
     allowNull: true,
-    defaultValue: false,
-    field: 'messages',
+    field: 'selected_list',
   })
-  messages?: boolean;
-
-  @ApiProperty({ example: true, description: 'Allow news notifications' })
-  @Field(() => Boolean, { nullable: true })
-  @Column({
-    type: DataType.BOOLEAN,
-    allowNull: true,
-    defaultValue: false,
-    field: 'news',
-  })
-  news?: boolean;
+  selected_list?: string[];
 
   @ApiProperty({ example: 1, description: 'Shop ID' })
   @Field(() => Int)
@@ -83,7 +67,7 @@ export class Notifications extends Model<
     allowNull: false,
     field: 'shop_id',
   })
-  shopId: number;
+  shop_id: number;
 
   @BelongsTo(() => Shop)
   shop: Shop;

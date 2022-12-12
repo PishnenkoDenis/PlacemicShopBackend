@@ -6,10 +6,19 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  Matches,
 } from 'class-validator';
+import { VALID_PASSWORD_REGEXP } from 'src/config';
 
 @InputType()
 export class CreateShopDto {
+  @ApiProperty({ example: 'Password', description: 'Shop password' })
+  @IsOptional()
+  @IsString({ message: 'Password should be string' })
+  @Matches(VALID_PASSWORD_REGEXP, { message: 'Invalid password' })
+  @Field(() => String, { nullable: true })
+  readonly password?: string;
+
   @ApiProperty({ example: 'Wear shop', description: 'Shop name' })
   @IsNotEmpty({ message: 'Title required' })
   @IsString({ message: 'Title should be string' })
@@ -30,19 +39,9 @@ export class CreateShopDto {
   @Field(() => String, { nullable: true })
   readonly logo?: string;
 
-  @ApiProperty({ example: 1, description: 'Novelties ID' })
-  @IsOptional()
-  @Field(() => Int, { nullable: true })
-  readonly noveltiesId?: number;
-
-  @ApiProperty({ example: 1, description: 'Sale ID' })
-  @IsOptional()
-  @Field(() => Int, { nullable: true })
-  readonly saleId?: number;
-
   @ApiProperty({ example: 1, description: 'Seller ID' })
   @Field(() => Int)
-  readonly user_id: number;
+  readonly userId: number;
 
   @ApiProperty({ example: 'image.png', description: 'Shop wallpaper' })
   @IsOptional()
@@ -53,7 +52,7 @@ export class CreateShopDto {
   @IsNotEmpty({ message: 'Telephone number required' })
   @IsPhoneNumber()
   @Field(() => Int)
-  readonly telphone: number;
+  readonly telephone: number;
 
   @ApiProperty({ example: 'shop@gmail.com', description: 'Shop email' })
   @IsNotEmpty({ message: 'Email required' })
@@ -63,71 +62,66 @@ export class CreateShopDto {
 
   @ApiProperty({ example: 'Kosmonavtov st. 22', description: 'Shop address' })
   @IsString({ message: 'Address should be string' })
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  readonly address?: string;
+  @Field(() => String)
+  readonly address: string;
+
+  @ApiProperty({ example: 'russian', description: 'Selected language' })
+  @IsString({ message: 'Language should be string' })
+  @Field(() => String)
+  readonly language: string;
+
+  @ApiProperty({ example: 'russian ruble', description: 'Currency' })
+  @IsString({ message: 'Currency should be string' })
+  @Field(() => String)
+  readonly currency: string;
 
   @ApiProperty({ example: 'OOO "Store"', description: 'Legal entity name' })
   @IsString({ message: 'Legal entity should be string' })
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  readonly legalEntity?: string;
+  @Field(() => String)
+  readonly legalEntity: string;
 
   @ApiProperty({ example: 0, description: 'INN' })
-  @IsOptional()
-  @Field(() => Int, { nullable: true })
-  readonly inn?: number;
+  @Field(() => Int)
+  readonly inn: number;
 
   @ApiProperty({ example: 0, description: 'KPP' })
-  @IsOptional()
-  @Field(() => Int, { nullable: true })
-  readonly kpp?: number;
+  @Field(() => Int)
+  readonly kpp: number;
 
   @ApiProperty({ example: 'Kosmonavtov st. 22', description: 'Legal address' })
   @IsString({ message: 'Legal address should be string' })
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  readonly legal_address?: string;
+  @Field(() => String)
+  readonly legalAddress: string;
 
   @ApiProperty({ example: 'Sberbank', description: 'The name of the bank' })
   @IsString({ message: 'Bank name should be string' })
-  @IsOptional()
-  @Field(() => String, { nullable: true })
-  readonly bank?: string;
+  @Field(() => String)
+  readonly bank: string;
 
   @ApiProperty({ example: 0, description: 'BIK' })
-  @IsOptional()
-  @Field(() => Int, { nullable: true })
-  readonly bik?: number;
+  @Field(() => Int)
+  readonly bik: number;
 
   @ApiProperty({ example: 0, description: 'Checking account' })
-  @IsOptional()
-  @Field(() => Int, { nullable: true })
-  readonly check_account?: number;
+  @Field(() => Int)
+  readonly checkAccount: number;
 
   @ApiProperty({ example: 0, description: 'Corp account' })
   @IsOptional()
-  @Field(() => Int, { nullable: true })
-  readonly corp_account?: number;
+  @Field(() => Int)
+  readonly corpAccount: number;
 
   @ApiProperty({ example: 'push', description: 'Notification type' })
   @IsOptional()
   @IsString({ message: 'Notification type should be string' })
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   readonly type?: string;
 
-  @ApiProperty({ example: true, description: 'Allow order notifications' })
+  @ApiProperty({
+    example: ['email', 'news'],
+    description: 'Allowed notifications list',
+  })
   @IsOptional()
-  @Field(() => Boolean, { nullable: true })
-  readonly orders?: boolean;
-
-  @ApiProperty({ example: true, description: 'Allow messages notifications' })
-  @IsOptional()
-  @Field(() => Boolean, { nullable: true })
-  readonly messages?: boolean;
-
-  @ApiProperty({ example: true, description: 'Allow news notifications' })
-  @IsOptional()
-  @Field(() => Boolean, { nullable: true })
-  readonly news?: boolean;
+  @Field(() => [String], { nullable: true })
+  readonly selectedList?: string[];
 }

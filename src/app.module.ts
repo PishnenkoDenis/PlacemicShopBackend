@@ -15,8 +15,11 @@ import { FavoritesProductModule } from './favorites-product/favorites-product.mo
 import { BrowsingHistory } from './models/browsing-history.model';
 import { Category } from './models/category.model';
 import { Comment } from './models/comment.model';
+import { Currency } from './models/currency.model';
 import { DeliveryAddress } from './models/delivery-address.model';
 import { FavoritesShop } from './models/favorites-shop.model';
+import { Languages } from './models/languages.model';
+import { Notifications } from './models/notifications.model';
 import { Order } from './models/order.model';
 import { OrderProduct } from './models/order-product.model';
 import { Payment } from './models/payment.model';
@@ -27,6 +30,7 @@ import { SpecificationProduct } from './models/specification-product.model';
 import { SubCategory } from './models/sub-category.model';
 import { Product } from './product/product.model';
 import { ProductModule } from './product/product.module';
+import { ShopModule } from './shop/shop.module';
 import { UserSecretModule } from './user-secret/user-secret.module';
 import { Password } from './users/password.model';
 import { RefreshToken } from './users/refresh-token.model';
@@ -73,6 +77,9 @@ import { UsersModule } from './users/users.module';
         SubCategory,
         RefreshToken,
         Discount,
+        Notifications,
+        Languages,
+        Currency,
       ],
       autoLoadModels: true,
     }),
@@ -83,6 +90,7 @@ import { UsersModule } from './users/users.module';
     UserSecretModule,
     ProductModule,
     DiscountModule,
+    ShopModule,
   ],
   controllers: [],
   providers: [FooResolver],

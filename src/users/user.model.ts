@@ -154,8 +154,8 @@ export class User extends Model<User, UserCreationAttributes> {
   @HasMany(() => FavoritesShop)
   favoritesShop: FavoritesShop[];
 
-  @HasMany(() => Shop)
-  shop: Shop[];
+  @HasOne(() => Shop)
+  shop: Shop;
 
   @HasMany(() => Order)
   order: Order[];

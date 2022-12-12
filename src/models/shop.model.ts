@@ -1,4 +1,4 @@
-import { Field, Int } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   BelongsTo,
@@ -6,6 +6,7 @@ import {
   DataType,
   ForeignKey,
   HasMany,
+  HasOne,
   Model,
   Table,
 } from 'sequelize-typescript';
@@ -14,29 +15,31 @@ import { Product } from 'src/product/product.model';
 import { User } from '../users/user.model';
 import { Category } from './category.model';
 import { Comment } from './comment.model';
+import { Currency } from './currency.model';
 import { FavoritesShop } from './favorites-shop.model';
+import { Languages } from './languages.model';
+import { Notifications } from './notifications.model';
 
 interface ShopCreateAttributes {
   title: string;
   description: string;
   logo?: string;
-  noveltiesId?: number;
-  saleId?: number;
   user_id: number;
   wallpaper?: string;
-  telphone: number;
+  telephone: number;
   email: string;
-  address?: string;
-  legal_entity?: string;
-  inn?: number;
-  kpp?: number;
-  legal_address?: string;
-  bank?: string;
-  bik?: number;
-  check_account?: number;
-  corp_account?: number;
+  address: string;
+  legal_entity: string;
+  inn: number;
+  kpp: number;
+  legal_address: string;
+  bank: string;
+  bik: number;
+  check_account: number;
+  corp_account: number;
 }
 
+@ObjectType()
 @Table({ tableName: 'shop' })
 export class Shop extends Model<Shop, ShopCreateAttributes> {
   @ApiProperty({ example: 1, description: 'Shop id' })
@@ -72,10 +75,10 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
   description: string;
 
   @ApiProperty({ example: 'logo.png', description: 'Shop logo' })
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
     field: 'logo',
   })
   logo?: string;
@@ -108,85 +111,88 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
   email: string;
 
   @ApiProperty({ example: 'Kosmonavtov st. 22', description: 'Shop address' })
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   @Column({
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
     field: 'address',
   })
-  address?: string;
+  address: string;
 
   @ApiProperty({ example: 'OOO "Store"', description: 'Legal entity name' })
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   @Column({
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
     field: 'legal_entity',
   })
-  legal_entity?: string;
+  legal_entity: string;
 
   @ApiProperty({ example: 0, description: 'INN' })
-  @Field(() => Int, { nullable: true })
+  @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
-    allowNull: true,
+    allowNull: false,
     field: 'inn',
   })
-  inn?: number;
+  inn: number;
 
   @ApiProperty({ example: 0, description: 'KPP' })
-  @Field(() => Int, { nullable: true })
+  @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
-    allowNull: true,
+    allowNull: false,
     field: 'kpp',
   })
-  kpp?: number;
+  kpp: number;
 
   @ApiProperty({ example: 'Kosmonavtov st. 22', description: 'Legal address' })
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   @Column({
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
     field: 'legal_address',
   })
-  legal_address?: string;
+  legal_address: string;
 
   @ApiProperty({ example: 'Sberbank', description: 'The name of the bank' })
-  @Field(() => String, { nullable: true })
+  @Field(() => String)
   @Column({
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
     field: 'bank',
   })
-  bank?: string;
+  bank: string;
 
   @ApiProperty({ example: 0, description: 'BIK' })
-  @Field(() => Int, { nullable: true })
+  @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
-    allowNull: true,
+    allowNull: false,
     field: 'bik',
   })
-  bik?: number;
+  bik: number;
 
-  @ApiProperty({ example: 0, description: 'Checking account' })
-  @Field(() => Int, { nullable: true })
+  @ApiProperty({
+    example: 0,
+    description: 'Checking account',
+  })
+  @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
-    allowNull: true,
+    allowNull: false,
     field: 'check_account',
   })
-  check_account?: number;
+  check_account: number;
 
   @ApiProperty({ example: 0, description: 'Corp account' })
-  @Field(() => Int, { nullable: true })
+  @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
-    allowNull: true,
+    allowNull: false,
     field: 'corp_account',
   })
-  corp_account?: number;
+  corp_account: number;
 
   @ApiProperty({ example: 1, description: 'Seller ID' })
   @Field(() => Int)
@@ -195,10 +201,19 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
     type: DataType.INTEGER,
     field: 'user_id',
   })
-  userId: number;
+  user_id: number;
 
   @BelongsTo(() => User)
   user: User;
+
+  @HasMany(() => Notifications)
+  notifications: Notifications[];
+
+  @HasOne(() => Languages)
+  language: Languages;
+
+  @HasOne(() => Currency)
+  currency: Currency;
 
   @HasMany(() => Comment)
   comment: Comment[];
