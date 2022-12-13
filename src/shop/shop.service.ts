@@ -38,8 +38,9 @@ export class ShopService {
     userId,
     language,
     currency,
-    type,
-    selectedList,
+    notifyEmail,
+    notifyPush,
+    notifyTelephone,
     password,
   }: CreateShopDto): Promise<Shop> {
     const shop = await this.shopRepository.create({
@@ -75,13 +76,13 @@ export class ShopService {
       shop_id: shop.id,
     });
 
-    if (type && selectedList) {
-      await this.notificationsRepository.create({
-        type,
-        selected_list: selectedList,
-        shop_id: shop.id,
-      });
-    }
+    await this.notificationsRepository.create({
+      email: notifyEmail,
+      push: notifyPush,
+      telephone: notifyTelephone,
+      shop_id: shop.id,
+    });
+
     return shop;
   }
 
@@ -106,8 +107,9 @@ export class ShopService {
       userId,
       language,
       currency,
-      type,
-      selectedList,
+      notifyEmail,
+      notifyPush,
+      notifyTelephone,
       password,
     }: CreateShopDto,
   ) {
@@ -138,10 +140,12 @@ export class ShopService {
 
     if (currency) await shop.currency.update({ currency });
 
-    if (type || selectedList) {
-      const [notifications] = shop.notifications;
-      await notifications.update({ type, selected_list: selectedList });
-    }
+    if (notifyEmail) await shop.notifications.update({ email: notifyEmail });
+
+    if (notifyPush) await shop.notifications.update({ push: notifyPush });
+
+    if (notifyTelephone)
+      await shop.notifications.update({ telephone: notifyTelephone });
 
     if (password) await this.usersService.updatePassword({ userId, password });
 
@@ -170,6 +174,24 @@ export class ShopService {
 
   async get(userId: number): Promise<Shop> {
     return await this.shopRepository.findOne({
+      attributes: [
+        'id',
+        'title',
+        'description',
+        'logo',
+        'wallpaper',
+        'telephone',
+        'email',
+        'address',
+        'legal_entity',
+        'inn',
+        'kpp',
+        'legal_address',
+        'bank',
+        'bik',
+        'check_account',
+        'corp_account',
+      ],
       where: { user_id: userId },
       include: { all: true },
     });

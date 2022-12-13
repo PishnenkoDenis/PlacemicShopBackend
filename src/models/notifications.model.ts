@@ -12,8 +12,9 @@ import {
 import { Shop } from './shop.model';
 
 interface NotificationCreateAttributes {
-  type?: string[];
-  selected_list?: string[];
+  email?: string[];
+  push?: string[];
+  telephone?: string[];
   shop_id: number;
 }
 
@@ -34,20 +35,23 @@ export class Notifications extends Model<
   })
   id: number;
 
-  @ApiProperty({ example: ['push', 'email'], description: 'Notification type' })
+  @ApiProperty({
+    example: ['orders', 'news'],
+    description: 'Notifications by email',
+  })
   @Field(() => [String], { nullable: true })
   @Column({
     type: DataType.ARRAY(
-      DataType.ENUM({ values: ['email', 'push', 'telephone'] }),
+      DataType.ENUM({ values: ['orders', 'messages', 'news'] }),
     ),
     allowNull: true,
-    field: 'type',
+    field: 'email',
   })
-  type?: string[];
+  email?: string[];
 
   @ApiProperty({
     example: ['orders', 'news'],
-    description: 'Allowed notifications list',
+    description: 'Push notifications',
   })
   @Field(() => [String], { nullable: true })
   @Column({
@@ -57,9 +61,23 @@ export class Notifications extends Model<
       }),
     ),
     allowNull: true,
-    field: 'selected_list',
+    field: 'push',
   })
-  selected_list?: string[];
+  push?: string[];
+
+  @ApiProperty({
+    example: ['orders', 'news'],
+    description: 'Notifications by telephone',
+  })
+  @Field(() => [String], { nullable: true })
+  @Column({
+    type: DataType.ARRAY(
+      DataType.ENUM({ values: ['orders', 'messages', 'news'] }),
+    ),
+    allowNull: true,
+    field: 'telephone',
+  })
+  telephone?: string[];
 
   @ApiProperty({ example: 1, description: 'Shop ID' })
   @Field(() => Int)

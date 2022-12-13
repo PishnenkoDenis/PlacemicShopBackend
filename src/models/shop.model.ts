@@ -207,8 +207,8 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
   @BelongsTo(() => User)
   user: User;
 
-  @HasMany(() => Notifications)
-  notifications: Notifications[];
+  @HasOne(() => Notifications)
+  notifications: Notifications;
 
   @HasOne(() => Languages)
   language: Languages;

@@ -132,17 +132,30 @@ export class CreateShopDto {
   @Field(() => String)
   readonly corpAccount: string;
 
-  @ApiProperty({ example: ['push', 'email'], description: 'Notification type' })
+  @ApiProperty({
+    example: ['orders', 'news'],
+    description: 'Notifications by email',
+  })
   @IsOptional()
   @IsString({ message: 'Notification type should be string' })
   @Field(() => [String], { nullable: true })
-  readonly type?: string[];
+  readonly notifyEmail?: string[];
 
   @ApiProperty({
-    example: ['email', 'news'],
-    description: 'Allowed notifications list',
+    example: ['orders', 'news'],
+    description: 'Push notifications',
   })
   @IsOptional()
+  @IsString({ message: 'Notification type should be string' })
   @Field(() => [String], { nullable: true })
-  readonly selectedList?: string[];
+  readonly notifyPush?: string[];
+
+  @ApiProperty({
+    example: ['orders', 'news'],
+    description: 'Notifications by telephone',
+  })
+  @IsOptional()
+  @IsString({ message: 'Notification type should be string' })
+  @Field(() => [String], { nullable: true })
+  readonly notifyTelephone?: string[];
 }
