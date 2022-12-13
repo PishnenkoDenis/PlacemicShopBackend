@@ -1,4 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, Float, InputType, Int } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
@@ -7,7 +7,10 @@ import {
   IsPhoneNumber,
   IsString,
   Matches,
+  Min,
+  MinLength,
 } from 'class-validator';
+import * as BigInt from 'graphql-bigint';
 import { VALID_PASSWORD_REGEXP } from 'src/config';
 
 @InputType()
@@ -51,8 +54,8 @@ export class CreateShopDto {
   @ApiProperty({ example: 89281985678, description: 'Shop telephone number' })
   @IsNotEmpty({ message: 'Telephone number required' })
   @IsPhoneNumber()
-  @Field(() => Int)
-  readonly telephone: number;
+  @Field(() => BigInt)
+  readonly telephone: bigint;
 
   @ApiProperty({ example: 'shop@gmail.com', description: 'Shop email' })
   @IsNotEmpty({ message: 'Email required' })
@@ -61,61 +64,79 @@ export class CreateShopDto {
   readonly email: string;
 
   @ApiProperty({ example: 'Kosmonavtov st. 22', description: 'Shop address' })
+  @IsNotEmpty({ message: 'Address required' })
   @IsString({ message: 'Address should be string' })
   @Field(() => String)
   readonly address: string;
 
   @ApiProperty({ example: 'russian', description: 'Selected language' })
+  @IsNotEmpty({ message: 'Language required' })
   @IsString({ message: 'Language should be string' })
   @Field(() => String)
   readonly language: string;
 
   @ApiProperty({ example: 'russian ruble', description: 'Currency' })
+  @IsNotEmpty({ message: 'Currency required' })
   @IsString({ message: 'Currency should be string' })
   @Field(() => String)
   readonly currency: string;
 
   @ApiProperty({ example: 'OOO "Store"', description: 'Legal entity name' })
+  @IsNotEmpty({ message: 'Legal Entity required' })
   @IsString({ message: 'Legal entity should be string' })
   @Field(() => String)
   readonly legalEntity: string;
 
-  @ApiProperty({ example: 0, description: 'INN' })
-  @Field(() => Int)
-  readonly inn: number;
+  @ApiProperty({ example: 2202022422, description: 'INN' })
+  @IsNotEmpty({ message: 'INN required' })
+  @Min(10)
+  @Field(() => BigInt)
+  readonly inn: bigint;
 
-  @ApiProperty({ example: 0, description: 'KPP' })
-  @Field(() => Int)
-  readonly kpp: number;
+  @ApiProperty({ example: 220202242, description: 'KPP' })
+  @IsNotEmpty({ message: 'KPP required' })
+  @Min(9)
+  @Field(() => BigInt)
+  readonly kpp: bigint;
 
   @ApiProperty({ example: 'Kosmonavtov st. 22', description: 'Legal address' })
+  @IsNotEmpty({ message: 'Legal address required' })
   @IsString({ message: 'Legal address should be string' })
   @Field(() => String)
   readonly legalAddress: string;
 
   @ApiProperty({ example: 'Sberbank', description: 'The name of the bank' })
+  @IsNotEmpty({ message: 'Bank required' })
   @IsString({ message: 'Bank name should be string' })
   @Field(() => String)
   readonly bank: string;
 
-  @ApiProperty({ example: 0, description: 'BIK' })
-  @Field(() => Int)
-  readonly bik: number;
+  @ApiProperty({ example: 220202242, description: 'BIK' })
+  @IsNotEmpty({ message: 'BIK required' })
+  @Min(9)
+  @Field(() => BigInt)
+  readonly bik: bigint;
 
-  @ApiProperty({ example: 0, description: 'Checking account' })
-  @Field(() => Int)
-  readonly checkAccount: number;
+  @ApiProperty({
+    example: '22134256789123445436',
+    description: 'Checking account',
+  })
+  @IsNotEmpty({ message: 'Checking account required' })
+  @MinLength(20)
+  @Field(() => String)
+  readonly checkAccount: string;
 
-  @ApiProperty({ example: 0, description: 'Corp account' })
-  @IsOptional()
-  @Field(() => Int)
-  readonly corpAccount: number;
+  @ApiProperty({ example: '22134256789123445436', description: 'Corp account' })
+  @IsNotEmpty({ message: 'Corp account required' })
+  @MinLength(20)
+  @Field(() => String)
+  readonly corpAccount: string;
 
-  @ApiProperty({ example: 'push', description: 'Notification type' })
+  @ApiProperty({ example: ['push', 'email'], description: 'Notification type' })
   @IsOptional()
   @IsString({ message: 'Notification type should be string' })
-  @Field(() => String)
-  readonly type?: string;
+  @Field(() => [String], { nullable: true })
+  readonly type?: string[];
 
   @ApiProperty({
     example: ['email', 'news'],

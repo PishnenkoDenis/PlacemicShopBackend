@@ -49,6 +49,18 @@ export class UsersService {
     );
   }
 
+  async updatePassword(
+    passwordParam: UserPasswordParamsInterface,
+  ): Promise<Password> {
+    const hash = await bcrypt.hash(passwordParam.password, 10);
+
+    const password = await this.passwordRepository.findOne({
+      where: { userId: passwordParam.userId },
+    });
+
+    return await password.update({ hash });
+  }
+
   async deleteRefreshToken(refresh: string, transaction?: Transaction) {
     return await this.refreshTokenRepository.destroy({
       where: {

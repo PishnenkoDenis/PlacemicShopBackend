@@ -134,7 +134,16 @@ export class ShopService {
       include: { all: true },
     });
 
-    console.log(shop);
+    if (language) await shop.language.update({ language });
+
+    if (currency) await shop.currency.update({ currency });
+
+    if (type || selectedList) {
+      const [notifications] = shop.notifications;
+      await notifications.update({ type, selected_list: selectedList });
+    }
+
+    if (password) await this.usersService.updatePassword({ userId, password });
 
     return await shop.update({
       title,
@@ -159,7 +168,7 @@ export class ShopService {
     await this.shopRepository.destroy({ where: { id: shopId } });
   }
 
-  async getShop(userId: number): Promise<Shop> {
+  async get(userId: number): Promise<Shop> {
     return await this.shopRepository.findOne({
       where: { user_id: userId },
       include: { all: true },

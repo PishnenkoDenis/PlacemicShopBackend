@@ -9,8 +9,10 @@ export class ShopResolver {
   constructor(private shopService: ShopService) {}
 
   @Query(() => Shop)
-  async getShope(@Args('userId', { type: () => Int }) userId: number) {
-    return await this.shopService.getShop(userId);
+  async getShope(
+    @Args('userId', { type: () => Int }) userId: number,
+  ): Promise<Shop> {
+    return await this.shopService.get(userId);
   }
 
   @Mutation(() => Shop)
@@ -27,9 +29,7 @@ export class ShopResolver {
   }
 
   @Mutation(() => Shop)
-  async removeShop(
-    @Args('shopId', { type: () => Int }) shopId: number,
-  ): Promise<object> {
+  async removeShop(@Args('shopId', { type: () => Int }) shopId: number) {
     await this.shopService.remove(shopId);
 
     return { shopId };

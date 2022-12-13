@@ -1,5 +1,6 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+import * as BigInt from 'graphql-bigint';
 import {
   BelongsTo,
   Column,
@@ -26,17 +27,17 @@ interface ShopCreateAttributes {
   logo?: string;
   user_id: number;
   wallpaper?: string;
-  telephone: number;
+  telephone: bigint;
   email: string;
   address: string;
   legal_entity: string;
-  inn: number;
-  kpp: number;
+  inn: bigint;
+  kpp: bigint;
   legal_address: string;
   bank: string;
-  bik: number;
-  check_account: number;
-  corp_account: number;
+  bik: bigint;
+  check_account: string;
+  corp_account: string;
 }
 
 @ObjectType()
@@ -93,13 +94,13 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
   wallpaper?: string;
 
   @ApiProperty({ example: 89281985678, description: 'Shop telephone number' })
-  @Field(() => Int)
+  @Field(() => BigInt)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
     allowNull: false,
     field: 'telephone',
   })
-  telephone: number;
+  telephone: bigint;
 
   @ApiProperty({ example: 'shop@gmail.com', description: 'Shop email' })
   @Field(() => String)
@@ -129,22 +130,22 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
   legal_entity: string;
 
   @ApiProperty({ example: 0, description: 'INN' })
-  @Field(() => Int)
+  @Field(() => BigInt)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
     allowNull: false,
     field: 'inn',
   })
-  inn: number;
+  inn: bigint;
 
   @ApiProperty({ example: 0, description: 'KPP' })
-  @Field(() => Int)
+  @Field(() => BigInt)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
     allowNull: false,
     field: 'kpp',
   })
-  kpp: number;
+  kpp: bigint;
 
   @ApiProperty({ example: 'Kosmonavtov st. 22', description: 'Legal address' })
   @Field(() => String)
@@ -165,34 +166,34 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
   bank: string;
 
   @ApiProperty({ example: 0, description: 'BIK' })
-  @Field(() => Int)
+  @Field(() => BigInt)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
     allowNull: false,
     field: 'bik',
   })
-  bik: number;
+  bik: bigint;
 
   @ApiProperty({
-    example: 0,
+    example: '22134256789123445436',
     description: 'Checking account',
   })
-  @Field(() => Int)
+  @Field(() => String)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
     field: 'check_account',
   })
-  check_account: number;
+  check_account: string;
 
-  @ApiProperty({ example: 0, description: 'Corp account' })
-  @Field(() => Int)
+  @ApiProperty({ example: '22134256789123445436', description: 'Corp account' })
+  @Field(() => String)
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
     field: 'corp_account',
   })
-  corp_account: number;
+  corp_account: string;
 
   @ApiProperty({ example: 1, description: 'Seller ID' })
   @Field(() => Int)

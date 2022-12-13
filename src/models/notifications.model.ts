@@ -12,7 +12,7 @@ import {
 import { Shop } from './shop.model';
 
 interface NotificationCreateAttributes {
-  type?: string;
+  type?: string[];
   selected_list?: string[];
   shop_id: number;
 }
@@ -34,14 +34,16 @@ export class Notifications extends Model<
   })
   id: number;
 
-  @ApiProperty({ example: 'push', description: 'Notification type' })
-  @Field(() => String, { nullable: true })
+  @ApiProperty({ example: ['push', 'email'], description: 'Notification type' })
+  @Field(() => [String], { nullable: true })
   @Column({
-    type: DataType.ENUM({ values: ['email', 'push', 'telephone'] }),
+    type: DataType.ARRAY(
+      DataType.ENUM({ values: ['email', 'push', 'telephone'] }),
+    ),
     allowNull: true,
     field: 'type',
   })
-  type?: string;
+  type?: string[];
 
   @ApiProperty({
     example: ['orders', 'news'],
