@@ -15,12 +15,19 @@ import { VALID_PASSWORD_REGEXP } from 'src/config';
 
 @InputType()
 export class CreateShopDto {
-  @ApiProperty({ example: 'Password', description: 'Shop password' })
+  @ApiProperty({ example: 'Password', description: 'New password' })
   @IsOptional()
   @IsString({ message: 'Password should be string' })
   @Matches(VALID_PASSWORD_REGEXP, { message: 'Invalid password' })
   @Field(() => String, { nullable: true })
-  readonly password?: string;
+  readonly newPassword?: string;
+
+  @ApiProperty({ example: 'Password', description: 'Old password' })
+  @IsOptional()
+  @IsString({ message: 'Password should be string' })
+  @Matches(VALID_PASSWORD_REGEXP, { message: 'Invalid password' })
+  @Field(() => String, { nullable: true })
+  readonly oldPassword?: string;
 
   @ApiProperty({ example: 'Wear shop', description: 'Shop name' })
   @IsNotEmpty({ message: 'Title required' })

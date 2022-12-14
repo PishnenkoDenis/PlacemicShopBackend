@@ -41,7 +41,8 @@ export class ShopService {
     notifyEmail,
     notifyPush,
     notifyTelephone,
-    password,
+    newPassword,
+    oldPassword,
   }: CreateShopDto): Promise<Shop> {
     const shop = await this.shopRepository.create({
       title,
@@ -62,8 +63,8 @@ export class ShopService {
       user_id: userId,
     });
 
-    if (password) {
-      await this.usersService.createPassword({ userId, password });
+    if (newPassword && oldPassword) {
+      await this.usersService.updatePassword(oldPassword, newPassword, userId);
     }
 
     await this.languagesRepository.create({
@@ -110,7 +111,8 @@ export class ShopService {
       notifyEmail,
       notifyPush,
       notifyTelephone,
-      password,
+      newPassword,
+      oldPassword,
     }: CreateShopDto,
   ) {
     const shop = await this.shopRepository.findOne({
@@ -140,14 +142,15 @@ export class ShopService {
 
     if (currency) await shop.currency.update({ currency });
 
-    if (notifyEmail) await shop.notifications.update({ email: notifyEmail });
+    await shop.notifications.update({
+      email: notifyEmail,
+      push: notifyPush,
+      telephone: notifyTelephone,
+    });
 
-    if (notifyPush) await shop.notifications.update({ push: notifyPush });
-
-    if (notifyTelephone)
-      await shop.notifications.update({ telephone: notifyTelephone });
-
-    if (password) await this.usersService.updatePassword({ userId, password });
+    if (newPassword && oldPassword) {
+      await this.usersService.updatePassword(oldPassword, newPassword, userId);
+    }
 
     return await shop.update({
       title,
