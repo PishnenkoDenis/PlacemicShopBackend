@@ -8,12 +8,16 @@ import { pipeline } from 'stream/promises';
 @Injectable()
 export class FileUploadService {
   async createFile(file: Promise<FileUpload>): Promise<Filename> {
-    const { createReadStream, filename } = await file;
-    const filePath = path.resolve('./src/', 'upload');
-    await pipeline(
-      createReadStream(),
-      createWriteStream(path.join(filePath, `${filename}`)),
-    );
-    return { filename: `${filePath}/${filename}` };
+    try {
+      const { createReadStream, filename } = await file;
+      const filePath = path.resolve('./src/', 'upload');
+      await pipeline(
+        createReadStream(),
+        createWriteStream(path.join(filePath, `${filename}`)),
+      );
+      return { filename: `${filePath}/${filename}` };
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }
