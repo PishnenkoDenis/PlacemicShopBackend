@@ -1,4 +1,4 @@
-import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
@@ -11,6 +11,7 @@ import {
   MinLength,
 } from 'class-validator';
 import * as BigInt from 'graphql-bigint';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { VALID_PASSWORD_REGEXP } from 'src/config';
 
 @InputType()
@@ -46,8 +47,8 @@ export class CreateShopDto {
 
   @ApiProperty({ example: 'logo.png', description: 'Shop logo' })
   @IsOptional()
-  @Field(() => String, { nullable: true })
-  readonly logo?: string;
+  @Field(() => GraphQLUpload, { nullable: true })
+  readonly logo?: Promise<FileUpload>;
 
   @ApiProperty({ example: 1, description: 'Seller ID' })
   @Field(() => Int)
@@ -55,8 +56,8 @@ export class CreateShopDto {
 
   @ApiProperty({ example: 'image.png', description: 'Shop wallpaper' })
   @IsOptional()
-  @Field(() => String, { nullable: true })
-  readonly wallpaper?: string;
+  @Field(() => GraphQLUpload, { nullable: true })
+  readonly wallpaper?: Promise<FileUpload>;
 
   @ApiProperty({ example: 89281985678, description: 'Shop telephone number' })
   @IsNotEmpty({ message: 'Telephone number required' })

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { FileUploadService } from 'src/file-upload/file-upload.service';
 import { Currency } from 'src/models/currency.model';
+import { Filename } from 'src/models/filename.model';
 import { Languages } from 'src/models/languages.model';
 import { Notifications } from 'src/models/notifications.model';
 import { Shop } from 'src/models/shop.model';
@@ -17,6 +19,7 @@ export class ShopService {
     @InjectModel(Notifications)
     private notificationsRepository: typeof Notifications,
     private usersService: UsersService,
+    private fileUploadService: FileUploadService,
   ) {}
 
   async create({
@@ -44,11 +47,9 @@ export class ShopService {
     newPassword,
     oldPassword,
   }: CreateShopDto): Promise<Shop> {
-    const shop = await this.shopRepository.create({
+    const shop = this.shopRepository.build({
       title,
       description,
-      logo,
-      wallpaper,
       telephone,
       email,
       address,
@@ -62,6 +63,14 @@ export class ShopService {
       corp_account: corpAccount,
       user_id: userId,
     });
+
+    if (logo)
+      shop.logo = (await this.fileUploadService.createFile(logo)).filename;
+
+    if (wallpaper)
+      shop.wallpaper = (
+        await this.fileUploadService.createFile(wallpaper)
+      ).filename;
 
     if (newPassword && oldPassword) {
       await this.usersService.updatePassword(oldPassword, newPassword, userId);
@@ -84,7 +93,7 @@ export class ShopService {
       shop_id: shop.id,
     });
 
-    return shop;
+    return await shop.save();
   }
 
   async update(
@@ -138,6 +147,9 @@ export class ShopService {
       include: { all: true },
     });
 
+    let logoName: Filename;
+    let wallpaperName: Filename;
+
     if (language) await shop.language.update({ language });
 
     if (currency) await shop.currency.update({ currency });
@@ -152,11 +164,17 @@ export class ShopService {
       await this.usersService.updatePassword(oldPassword, newPassword, userId);
     }
 
+    if (logo) {
+      logoName = await this.fileUploadService.createFile(logo);
+    }
+
+    if (wallpaper) {
+      wallpaperName = await this.fileUploadService.createFile(wallpaper);
+    }
+
     return await shop.update({
       title,
       description,
-      logo,
-      wallpaper,
       telephone,
       email,
       address,
@@ -168,6 +186,8 @@ export class ShopService {
       bik,
       check_account: checkAccount,
       corp_account: corpAccount,
+      logo: logoName.filename,
+      wallpaper: wallpaperName.filename,
     });
   }
 

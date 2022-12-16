@@ -42,6 +42,7 @@ lerna-debug.log*
 
 src/database/config.json
 src/database/config/config.json
+/src/upload
 
 backups
 

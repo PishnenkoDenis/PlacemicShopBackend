@@ -12,6 +12,7 @@ import { Discount } from './discount/discount.model';
 import { DiscountModule } from './discount/discount.module';
 import { FavoritesProduct } from './favorites-product/favorites-product.model';
 import { FavoritesProductModule } from './favorites-product/favorites-product.module';
+import { FileUploadModule } from './file-upload/file-upload.module';
 import { BrowsingHistory } from './models/browsing-history.model';
 import { Category } from './models/category.model';
 import { Comment } from './models/comment.model';
@@ -91,6 +92,7 @@ import { UsersModule } from './users/users.module';
     ProductModule,
     DiscountModule,
     ShopModule,
+    FileUploadModule,
   ],
   controllers: [],
   providers: [FooResolver],
