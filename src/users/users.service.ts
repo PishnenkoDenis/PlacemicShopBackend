@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
 import { Transaction } from 'sequelize';
@@ -47,6 +47,25 @@ export class UsersService {
         transaction,
       },
     );
+  }
+
+  async updatePassword(
+    oldPassword: string,
+    newPassword: string,
+    userId: number,
+  ): Promise<Password> {
+    const password = await this.passwordRepository.findOne({
+      attributes: ['id', 'hash', 'userId'],
+      where: { userId },
+    });
+
+    const comparedPassword = await bcrypt.compare(oldPassword, password.hash);
+
+    if (comparedPassword) {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      return await password.update({ hash: hashedPassword });
+    } else throw new BadRequestException('Uncorrect old password');
   }
 
   async deleteRefreshToken(refresh: string, transaction?: Transaction) {
