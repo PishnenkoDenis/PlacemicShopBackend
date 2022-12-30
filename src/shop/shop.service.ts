@@ -76,6 +76,8 @@ export class ShopService {
       await this.usersService.updatePassword(oldPassword, newPassword, userId);
     }
 
+    await shop.save();
+
     await this.languagesRepository.create({
       language,
       shop_id: shop.id,
@@ -93,7 +95,7 @@ export class ShopService {
       shop_id: shop.id,
     });
 
-    return await shop.save();
+    return shop;
   }
 
   async update(

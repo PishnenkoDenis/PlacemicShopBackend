@@ -59,11 +59,14 @@ export class CreateShopDto {
   @Field(() => GraphQLUpload, { nullable: true })
   readonly wallpaper?: Promise<FileUpload>;
 
-  @ApiProperty({ example: 89281985678, description: 'Shop telephone number' })
+  @ApiProperty({
+    example: '+7 (900) 122-10-22',
+    description: 'Shop telephone number',
+  })
   @IsNotEmpty({ message: 'Telephone number required' })
   @IsPhoneNumber()
-  @Field(() => BigInt)
-  readonly telephone: bigint;
+  @Field(() => String)
+  readonly telephone: string;
 
   @ApiProperty({ example: 'shop@gmail.com', description: 'Shop email' })
   @IsNotEmpty({ message: 'Email required' })
@@ -146,7 +149,7 @@ export class CreateShopDto {
   })
   @IsOptional()
   @IsString({ message: 'Notification type should be string' })
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String], { nullable: 'itemsAndList' })
   readonly notifyEmail?: string[];
 
   @ApiProperty({
@@ -155,7 +158,7 @@ export class CreateShopDto {
   })
   @IsOptional()
   @IsString({ message: 'Notification type should be string' })
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String], { nullable: 'itemsAndList' })
   readonly notifyPush?: string[];
 
   @ApiProperty({
@@ -164,6 +167,6 @@ export class CreateShopDto {
   })
   @IsOptional()
   @IsString({ message: 'Notification type should be string' })
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String], { nullable: 'itemsAndList' })
   readonly notifyTelephone?: string[];
 }

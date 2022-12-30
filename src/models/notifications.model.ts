@@ -39,11 +39,14 @@ export class Notifications extends Model<
     example: ['orders', 'news'],
     description: 'Notifications by email',
   })
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String], { nullable: 'itemsAndList' })
   @Column({
     type: DataType.ARRAY(
-      DataType.ENUM({ values: ['orders', 'messages', 'news'] }),
+      DataType.ENUM({
+        values: ['ordersEmail', 'messagesEmail', 'newsEmail'],
+      }),
     ),
+    defaultValue: [null, null, null],
     allowNull: true,
     field: 'email',
   })
@@ -53,13 +56,14 @@ export class Notifications extends Model<
     example: ['orders', 'news'],
     description: 'Push notifications',
   })
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String], { nullable: 'itemsAndList' })
   @Column({
     type: DataType.ARRAY(
       DataType.ENUM({
-        values: ['orders', 'messages', 'news'],
+        values: ['ordersPush', 'messagesPush', 'newsPush'],
       }),
     ),
+    defaultValue: [null, null, null],
     allowNull: true,
     field: 'push',
   })
@@ -69,11 +73,14 @@ export class Notifications extends Model<
     example: ['orders', 'news'],
     description: 'Notifications by telephone',
   })
-  @Field(() => [String], { nullable: true })
+  @Field(() => [String], { nullable: 'itemsAndList' })
   @Column({
     type: DataType.ARRAY(
-      DataType.ENUM({ values: ['orders', 'messages', 'news'] }),
+      DataType.ENUM({
+        values: ['ordersPhone', 'messagesPhone', 'newsPhone'],
+      }),
     ),
+    defaultValue: [null, null, null],
     allowNull: true,
     field: 'telephone',
   })

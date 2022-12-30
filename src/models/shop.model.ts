@@ -27,7 +27,7 @@ interface ShopCreateAttributes {
   logo?: string;
   user_id: number;
   wallpaper?: string;
-  telephone: bigint;
+  telephone: string;
   email: string;
   address: string;
   legal_entity: string;
@@ -93,14 +93,17 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
   })
   wallpaper?: string;
 
-  @ApiProperty({ example: 89281985678, description: 'Shop telephone number' })
-  @Field(() => BigInt)
+  @ApiProperty({
+    example: '+7 (900) 122-10-22',
+    description: 'Shop telephone number',
+  })
+  @Field(() => String)
   @Column({
-    type: DataType.BIGINT,
+    type: DataType.STRING,
     allowNull: false,
     field: 'telephone',
   })
-  telephone: bigint;
+  telephone: string;
 
   @ApiProperty({ example: 'shop@gmail.com', description: 'Shop email' })
   @Field(() => String)
