@@ -65,11 +65,13 @@ export class ShopService {
     });
 
     if (logo)
-      shop.logo = (await this.fileUploadService.createFile(logo)).filename;
+      shop.logo = (
+        await this.fileUploadService.createFile(await logo)
+      ).filename;
 
     if (wallpaper)
       shop.wallpaper = (
-        await this.fileUploadService.createFile(wallpaper)
+        await this.fileUploadService.createFile(await wallpaper)
       ).filename;
 
     if (newPassword && oldPassword) {
@@ -167,11 +169,11 @@ export class ShopService {
     }
 
     if (logo) {
-      logoName = await this.fileUploadService.createFile(logo);
+      logoName = await this.fileUploadService.createFile(await logo);
     }
 
     if (wallpaper) {
-      wallpaperName = await this.fileUploadService.createFile(wallpaper);
+      wallpaperName = await this.fileUploadService.createFile(await wallpaper);
     }
 
     return await shop.update({

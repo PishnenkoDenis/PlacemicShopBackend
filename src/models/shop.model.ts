@@ -31,11 +31,11 @@ interface ShopCreateAttributes {
   email: string;
   address: string;
   legal_entity: string;
-  inn: bigint;
-  kpp: bigint;
+  inn: string;
+  kpp: string;
   legal_address: string;
   bank: string;
-  bik: bigint;
+  bik: string;
   check_account: string;
   corp_account: string;
 }
@@ -132,23 +132,23 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
   })
   legal_entity: string;
 
-  @ApiProperty({ example: 0, description: 'INN' })
-  @Field(() => BigInt)
+  @ApiProperty({ example: '2210202233', description: 'INN' })
+  @Field(() => String)
   @Column({
-    type: DataType.BIGINT,
+    type: DataType.STRING,
     allowNull: false,
     field: 'inn',
   })
-  inn: bigint;
+  inn: string;
 
-  @ApiProperty({ example: 0, description: 'KPP' })
-  @Field(() => BigInt)
+  @ApiProperty({ example: '221020223', description: 'KPP' })
+  @Field(() => String)
   @Column({
-    type: DataType.BIGINT,
+    type: DataType.STRING,
     allowNull: false,
     field: 'kpp',
   })
-  kpp: bigint;
+  kpp: string;
 
   @ApiProperty({ example: 'Kosmonavtov st. 22', description: 'Legal address' })
   @Field(() => String)
@@ -168,14 +168,14 @@ export class Shop extends Model<Shop, ShopCreateAttributes> {
   })
   bank: string;
 
-  @ApiProperty({ example: 0, description: 'BIK' })
-  @Field(() => BigInt)
+  @ApiProperty({ example: '221020223', description: 'BIK' })
+  @Field(() => String)
   @Column({
-    type: DataType.BIGINT,
+    type: DataType.STRING,
     allowNull: false,
     field: 'bik',
   })
-  bik: bigint;
+  bik: string;
 
   @ApiProperty({
     example: '22134256789123445436',
