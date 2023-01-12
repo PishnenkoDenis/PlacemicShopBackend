@@ -41,9 +41,7 @@ export class ShopService {
     userId,
     language,
     currency,
-    notifyEmail,
-    notifyPush,
-    notifyTelephone,
+    notifications,
     newPassword,
     oldPassword,
   }: CreateShopDto): Promise<Shop> {
@@ -90,11 +88,11 @@ export class ShopService {
       shop_id: shop.id,
     });
 
-    await this.notificationsRepository.create({
-      email: notifyEmail,
-      push: notifyPush,
-      telephone: notifyTelephone,
-      shop_id: shop.id,
+    notifications.forEach(async (notification) => {
+      await this.notificationsRepository.create({
+        ...notification,
+        shopId: shop.id,
+      });
     });
 
     return shop;
@@ -121,9 +119,7 @@ export class ShopService {
       userId,
       language,
       currency,
-      notifyEmail,
-      notifyPush,
-      notifyTelephone,
+      notifications,
       newPassword,
       oldPassword,
     }: CreateShopDto,
@@ -158,10 +154,13 @@ export class ShopService {
 
     if (currency) await shop.currency.update({ currency });
 
-    await shop.notifications.update({
-      email: notifyEmail,
-      push: notifyPush,
-      telephone: notifyTelephone,
+    notifications.forEach(async (notification) => {
+      await this.notificationsRepository.update(
+        {
+          ...notification,
+        },
+        { where: { shopId: shop.id } },
+      );
     });
 
     if (newPassword && oldPassword) {

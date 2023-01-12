@@ -12,6 +12,8 @@ import {
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { VALID_PASSWORD_REGEXP } from 'src/config';
 
+import { NotificationsDto } from './notifications.dto';
+
 @InputType()
 export class CreateShopDto {
   @ApiProperty({ example: 'Password', description: 'New password' })
@@ -142,29 +144,9 @@ export class CreateShopDto {
   readonly corpAccount: string;
 
   @ApiProperty({
-    example: ['orders', 'news'],
-    description: 'Notifications by email',
+    description: 'Notifications',
   })
   @IsOptional()
-  @IsString({ message: 'Notification type should be string' })
-  @Field(() => [String], { nullable: 'itemsAndList' })
-  readonly notifyEmail?: string[];
-
-  @ApiProperty({
-    example: ['orders', 'news'],
-    description: 'Push notifications',
-  })
-  @IsOptional()
-  @IsString({ message: 'Notification type should be string' })
-  @Field(() => [String], { nullable: 'itemsAndList' })
-  readonly notifyPush?: string[];
-
-  @ApiProperty({
-    example: ['orders', 'news'],
-    description: 'Notifications by telephone',
-  })
-  @IsOptional()
-  @IsString({ message: 'Notification type should be string' })
-  @Field(() => [String], { nullable: 'itemsAndList' })
-  readonly notifyTelephone?: string[];
+  @Field(() => [NotificationsDto])
+  readonly notifications: NotificationsDto[];
 }
