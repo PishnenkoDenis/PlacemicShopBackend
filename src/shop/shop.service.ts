@@ -62,14 +62,17 @@ export class ShopService {
       user_id: userId,
     });
 
-    if (logo)
+    const recievedLogo = await logo;
+    const recievedWallpaper = await wallpaper;
+
+    if (recievedLogo)
       shop.logo = (
-        await this.fileUploadService.createFile(await logo)
+        await this.fileUploadService.createFile(recievedLogo)
       ).filename;
 
-    if (wallpaper)
+    if (recievedWallpaper)
       shop.wallpaper = (
-        await this.fileUploadService.createFile(await wallpaper)
+        await this.fileUploadService.createFile(recievedWallpaper)
       ).filename;
 
     if (newPassword && oldPassword) {
@@ -88,12 +91,12 @@ export class ShopService {
       shop_id: shop.id,
     });
 
-    notifications.forEach(async (notification) => {
+    for await (const notification of notifications) {
       await this.notificationsRepository.create({
         ...notification,
         shopId: shop.id,
       });
-    });
+    }
 
     return shop;
   }
@@ -150,29 +153,43 @@ export class ShopService {
     let logoName: Filename;
     let wallpaperName: Filename;
 
+    const recievedLogo = await logo;
+    const recievedWallpaper = await wallpaper;
+
     if (language) await shop.language.update({ language });
 
     if (currency) await shop.currency.update({ currency });
 
-    notifications.forEach(async (notification) => {
+    // notifications.forEach(async (notification) => {
+    //   await this.notificationsRepository.update(
+    //     {
+    //       ...notification,
+    //     },
+    //     { where: { shopId: shop.id } },
+    //   );
+    // });
+
+    for await (const notification of notifications) {
       await this.notificationsRepository.update(
         {
           ...notification,
         },
         { where: { shopId: shop.id } },
       );
-    });
+    }
 
     if (newPassword && oldPassword) {
       await this.usersService.updatePassword(oldPassword, newPassword, userId);
     }
 
-    if (logo) {
-      logoName = await this.fileUploadService.createFile(await logo);
+    if (recievedLogo) {
+      logoName = await this.fileUploadService.createFile(recievedLogo);
     }
 
-    if (wallpaper) {
-      wallpaperName = await this.fileUploadService.createFile(await wallpaper);
+    if (recievedWallpaper) {
+      wallpaperName = await this.fileUploadService.createFile(
+        recievedWallpaper,
+      );
     }
 
     return await shop.update({

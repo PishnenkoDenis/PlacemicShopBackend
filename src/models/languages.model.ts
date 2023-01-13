@@ -33,7 +33,7 @@ export class Languages extends Model<Languages, CreateLanguageAttributes> {
   @ApiProperty({ example: 'Русский', description: 'Selected language' })
   @Field(() => String)
   @Column({
-    type: DataType.ENUM({ values: ['Русский', 'Английский'] }),
+    type: DataType.STRING,
     allowNull: false,
     field: 'language',
   })
