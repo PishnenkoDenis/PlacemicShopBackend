@@ -93,12 +93,13 @@ export class ShopService {
       shop_id: shop.id,
     });
 
-    Promise.all(
-      notifications.map((notification) =>
-        this.notificationsRepository.create({
-          ...notification,
-          shopId: shop.id,
-        }),
+    await Promise.all(
+      notifications.map(
+        async (notification) =>
+          await this.notificationsRepository.create({
+            ...notification,
+            shopId: shop.id,
+          }),
       ),
     );
 
@@ -164,7 +165,7 @@ export class ShopService {
 
     if (currency) await shop.currency.update({ currency });
 
-    Promise.all(
+    await Promise.all(
       notifications.map((notification) =>
         this.notificationsRepository.update(
           {
