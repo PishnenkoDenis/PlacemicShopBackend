@@ -94,12 +94,11 @@ export class ShopService {
     });
 
     await Promise.all(
-      notifications.map(
-        async (notification) =>
-          await this.notificationsRepository.create({
-            ...notification,
-            shopId: shop.id,
-          }),
+      notifications.map((notification) =>
+        this.notificationsRepository.create({
+          ...notification,
+          shopId: shop.id,
+        }),
       ),
     );
 
