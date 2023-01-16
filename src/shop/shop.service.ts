@@ -41,9 +41,7 @@ export class ShopService {
     userId,
     language,
     currency,
-    notifyEmail,
-    notifyPush,
-    notifyTelephone,
+    notifications,
     newPassword,
     oldPassword,
   }: CreateShopDto): Promise<Shop> {
@@ -64,17 +62,26 @@ export class ShopService {
       user_id: userId,
     });
 
-    if (logo)
-      shop.logo = (await this.fileUploadService.createFile(logo)).filename;
+    const recievedLogo = await logo;
+    const recievedWallpaper = await wallpaper;
 
-    if (wallpaper)
-      shop.wallpaper = (
-        await this.fileUploadService.createFile(wallpaper)
-      ).filename;
+    if (recievedLogo) {
+      const logoPath = await this.fileUploadService.createFile(recievedLogo);
+      shop.logo = logoPath.filename;
+    }
+
+    if (recievedWallpaper) {
+      const wallpaperPath = await this.fileUploadService.createFile(
+        recievedWallpaper,
+      );
+      shop.wallpaper = wallpaperPath.filename;
+    }
 
     if (newPassword && oldPassword) {
       await this.usersService.updatePassword(oldPassword, newPassword, userId);
     }
+
+    await shop.save();
 
     await this.languagesRepository.create({
       language,
@@ -86,14 +93,16 @@ export class ShopService {
       shop_id: shop.id,
     });
 
-    await this.notificationsRepository.create({
-      email: notifyEmail,
-      push: notifyPush,
-      telephone: notifyTelephone,
-      shop_id: shop.id,
-    });
+    await Promise.all(
+      notifications.map((notification) =>
+        this.notificationsRepository.create({
+          ...notification,
+          shopId: shop.id,
+        }),
+      ),
+    );
 
-    return await shop.save();
+    return shop;
   }
 
   async update(
@@ -117,9 +126,7 @@ export class ShopService {
       userId,
       language,
       currency,
-      notifyEmail,
-      notifyPush,
-      notifyTelephone,
+      notifications,
       newPassword,
       oldPassword,
     }: CreateShopDto,
@@ -150,26 +157,36 @@ export class ShopService {
     let logoName: Filename;
     let wallpaperName: Filename;
 
+    const recievedLogo = await logo;
+    const recievedWallpaper = await wallpaper;
+
     if (language) await shop.language.update({ language });
 
     if (currency) await shop.currency.update({ currency });
 
-    await shop.notifications.update({
-      email: notifyEmail,
-      push: notifyPush,
-      telephone: notifyTelephone,
-    });
+    await Promise.all(
+      notifications.map((notification) =>
+        this.notificationsRepository.update(
+          {
+            ...notification,
+          },
+          { where: { shopId: shop.id } },
+        ),
+      ),
+    );
 
     if (newPassword && oldPassword) {
       await this.usersService.updatePassword(oldPassword, newPassword, userId);
     }
 
-    if (logo) {
-      logoName = await this.fileUploadService.createFile(logo);
+    if (recievedLogo) {
+      logoName = await this.fileUploadService.createFile(recievedLogo);
     }
 
-    if (wallpaper) {
-      wallpaperName = await this.fileUploadService.createFile(wallpaper);
+    if (recievedWallpaper) {
+      wallpaperName = await this.fileUploadService.createFile(
+        recievedWallpaper,
+      );
     }
 
     return await shop.update({

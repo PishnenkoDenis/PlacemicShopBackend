@@ -6,8 +6,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Order } from './order.model';
+
 import { User } from '../users/user.model';
+import { Order } from './order.model';
 
 interface PurchaseHistoryCreateAttributes {
   orderId: number;

@@ -7,12 +7,12 @@ import {
   IsPhoneNumber,
   IsString,
   Matches,
-  Min,
   MinLength,
 } from 'class-validator';
-import * as BigInt from 'graphql-bigint';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { VALID_PASSWORD_REGEXP } from 'src/config';
+
+import { NotificationsDto } from './notifications.dto';
 
 @InputType()
 export class CreateShopDto {
@@ -57,13 +57,16 @@ export class CreateShopDto {
   @ApiProperty({ example: 'image.png', description: 'Shop wallpaper' })
   @IsOptional()
   @Field(() => GraphQLUpload, { nullable: true })
-  readonly wallpaper?: Promise<FileUpload>;
+  readonly wallpaper: Promise<FileUpload>;
 
-  @ApiProperty({ example: 89281985678, description: 'Shop telephone number' })
+  @ApiProperty({
+    example: '+7 (900) 122-10-22',
+    description: 'Shop telephone number',
+  })
   @IsNotEmpty({ message: 'Telephone number required' })
   @IsPhoneNumber()
-  @Field(() => BigInt)
-  readonly telephone: bigint;
+  @Field(() => String)
+  readonly telephone: string;
 
   @ApiProperty({ example: 'shop@gmail.com', description: 'Shop email' })
   @IsNotEmpty({ message: 'Email required' })
@@ -95,17 +98,17 @@ export class CreateShopDto {
   @Field(() => String)
   readonly legalEntity: string;
 
-  @ApiProperty({ example: 2202022422, description: 'INN' })
+  @ApiProperty({ example: '2202022422', description: 'INN' })
   @IsNotEmpty({ message: 'INN required' })
-  @Min(10)
-  @Field(() => BigInt)
-  readonly inn: bigint;
+  @MinLength(10)
+  @Field(() => String)
+  readonly inn: string;
 
-  @ApiProperty({ example: 220202242, description: 'KPP' })
+  @ApiProperty({ example: '220202242', description: 'KPP' })
   @IsNotEmpty({ message: 'KPP required' })
-  @Min(9)
-  @Field(() => BigInt)
-  readonly kpp: bigint;
+  @MinLength(9)
+  @Field(() => String)
+  readonly kpp: string;
 
   @ApiProperty({ example: 'Kosmonavtov st. 22', description: 'Legal address' })
   @IsNotEmpty({ message: 'Legal address required' })
@@ -119,11 +122,11 @@ export class CreateShopDto {
   @Field(() => String)
   readonly bank: string;
 
-  @ApiProperty({ example: 220202242, description: 'BIK' })
+  @ApiProperty({ example: '220202242', description: 'BIK' })
   @IsNotEmpty({ message: 'BIK required' })
-  @Min(9)
-  @Field(() => BigInt)
-  readonly bik: bigint;
+  @MinLength(9)
+  @Field(() => String)
+  readonly bik: string;
 
   @ApiProperty({
     example: '22134256789123445436',
@@ -141,29 +144,9 @@ export class CreateShopDto {
   readonly corpAccount: string;
 
   @ApiProperty({
-    example: ['orders', 'news'],
-    description: 'Notifications by email',
+    description: 'Notifications',
   })
   @IsOptional()
-  @IsString({ message: 'Notification type should be string' })
-  @Field(() => [String], { nullable: true })
-  readonly notifyEmail?: string[];
-
-  @ApiProperty({
-    example: ['orders', 'news'],
-    description: 'Push notifications',
-  })
-  @IsOptional()
-  @IsString({ message: 'Notification type should be string' })
-  @Field(() => [String], { nullable: true })
-  readonly notifyPush?: string[];
-
-  @ApiProperty({
-    example: ['orders', 'news'],
-    description: 'Notifications by telephone',
-  })
-  @IsOptional()
-  @IsString({ message: 'Notification type should be string' })
-  @Field(() => [String], { nullable: true })
-  readonly notifyTelephone?: string[];
+  @Field(() => [NotificationsDto])
+  readonly notifications: NotificationsDto[];
 }

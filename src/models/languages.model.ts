@@ -30,10 +30,10 @@ export class Languages extends Model<Languages, CreateLanguageAttributes> {
   })
   id: number;
 
-  @ApiProperty({ example: 'russian', description: 'Selected language' })
+  @ApiProperty({ example: 'Русский', description: 'Selected language' })
   @Field(() => String)
   @Column({
-    type: DataType.ENUM({ values: ['russian', 'english'] }),
+    type: DataType.STRING,
     allowNull: false,
     field: 'language',
   })

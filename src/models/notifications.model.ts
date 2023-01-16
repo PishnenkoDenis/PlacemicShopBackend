@@ -12,10 +12,10 @@ import {
 import { Shop } from './shop.model';
 
 interface NotificationCreateAttributes {
-  email?: string[];
-  push?: string[];
-  telephone?: string[];
-  shop_id: number;
+  type?: string;
+  resource?: string;
+  is_active?: boolean;
+  shopId: number;
 }
 
 @ObjectType()
@@ -28,56 +28,39 @@ export class Notifications extends Model<
   @Field(() => Int)
   @Column({
     type: DataType.INTEGER,
-    allowNull: false,
+    allowNull: true,
     unique: true,
     autoIncrement: true,
     primaryKey: true,
   })
   id: number;
 
-  @ApiProperty({
-    example: ['orders', 'news'],
-    description: 'Notifications by email',
-  })
-  @Field(() => [String], { nullable: true })
+  @ApiProperty({ example: 'email', description: 'Notification type' })
+  @Field(() => String, { nullable: true })
   @Column({
-    type: DataType.ARRAY(
-      DataType.ENUM({ values: ['orders', 'messages', 'news'] }),
-    ),
+    type: DataType.ENUM({ values: ['Email', 'Phone', 'Push'] }),
     allowNull: true,
-    field: 'email',
+    field: 'type',
   })
-  email?: string[];
+  type?: string;
 
-  @ApiProperty({
-    example: ['orders', 'news'],
-    description: 'Push notifications',
-  })
-  @Field(() => [String], { nullable: true })
+  @ApiProperty({ example: 'news', description: 'Notification resource' })
+  @Field(() => String, { nullable: true })
   @Column({
-    type: DataType.ARRAY(
-      DataType.ENUM({
-        values: ['orders', 'messages', 'news'],
-      }),
-    ),
+    type: DataType.ENUM({ values: ['messages', 'news', 'orders'] }),
     allowNull: true,
-    field: 'push',
+    field: 'resource',
   })
-  push?: string[];
+  resource?: string;
 
-  @ApiProperty({
-    example: ['orders', 'news'],
-    description: 'Notifications by telephone',
-  })
-  @Field(() => [String], { nullable: true })
+  @ApiProperty({ example: true, description: 'Notification state' })
+  @Field(() => Boolean, { nullable: true })
   @Column({
-    type: DataType.ARRAY(
-      DataType.ENUM({ values: ['orders', 'messages', 'news'] }),
-    ),
+    type: DataType.BOOLEAN,
     allowNull: true,
-    field: 'telephone',
+    field: 'is_active',
   })
-  telephone?: string[];
+  is_active?: boolean;
 
   @ApiProperty({ example: 1, description: 'Shop ID' })
   @Field(() => Int)
@@ -87,7 +70,7 @@ export class Notifications extends Model<
     allowNull: false,
     field: 'shop_id',
   })
-  shop_id: number;
+  shopId: number;
 
   @BelongsTo(() => Shop)
   shop: Shop;
