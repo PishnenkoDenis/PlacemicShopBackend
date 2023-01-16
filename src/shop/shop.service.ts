@@ -160,15 +160,6 @@ export class ShopService {
 
     if (currency) await shop.currency.update({ currency });
 
-    // notifications.forEach(async (notification) => {
-    //   await this.notificationsRepository.update(
-    //     {
-    //       ...notification,
-    //     },
-    //     { where: { shopId: shop.id } },
-    //   );
-    // });
-
     for await (const notification of notifications) {
       await this.notificationsRepository.update(
         {
