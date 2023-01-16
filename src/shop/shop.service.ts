@@ -65,15 +65,18 @@ export class ShopService {
     const recievedLogo = await logo;
     const recievedWallpaper = await wallpaper;
 
-    if (recievedLogo)
-      shop.logo = (
-        await this.fileUploadService.createFile(recievedLogo)
-      ).filename;
+    if (recievedLogo) {
+      const logoPath = (await this.fileUploadService.createFile(recievedLogo))
+        .filename;
+      shop.logo = logoPath;
+    }
 
-    if (recievedWallpaper)
-      shop.wallpaper = (
+    if (recievedWallpaper) {
+      const wallpaperPath = (
         await this.fileUploadService.createFile(recievedWallpaper)
       ).filename;
+      shop.wallpaper = wallpaperPath;
+    }
 
     if (newPassword && oldPassword) {
       await this.usersService.updatePassword(oldPassword, newPassword, userId);
@@ -91,12 +94,14 @@ export class ShopService {
       shop_id: shop.id,
     });
 
-    for await (const notification of notifications) {
-      await this.notificationsRepository.create({
-        ...notification,
-        shopId: shop.id,
-      });
-    }
+    Promise.all(
+      notifications.map((notification) =>
+        this.notificationsRepository.create({
+          ...notification,
+          shopId: shop.id,
+        }),
+      ),
+    );
 
     return shop;
   }
@@ -160,14 +165,16 @@ export class ShopService {
 
     if (currency) await shop.currency.update({ currency });
 
-    for await (const notification of notifications) {
-      await this.notificationsRepository.update(
-        {
-          ...notification,
-        },
-        { where: { shopId: shop.id } },
-      );
-    }
+    Promise.all(
+      notifications.map((notification) =>
+        this.notificationsRepository.update(
+          {
+            ...notification,
+          },
+          { where: { shopId: shop.id } },
+        ),
+      ),
+    );
 
     if (newPassword && oldPassword) {
       await this.usersService.updatePassword(oldPassword, newPassword, userId);
