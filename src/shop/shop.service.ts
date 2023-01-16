@@ -66,16 +66,15 @@ export class ShopService {
     const recievedWallpaper = await wallpaper;
 
     if (recievedLogo) {
-      const logoPath = (await this.fileUploadService.createFile(recievedLogo))
-        .filename;
-      shop.logo = logoPath;
+      const logoPath = await this.fileUploadService.createFile(recievedLogo);
+      shop.logo = logoPath.filename;
     }
 
     if (recievedWallpaper) {
-      const wallpaperPath = (
-        await this.fileUploadService.createFile(recievedWallpaper)
-      ).filename;
-      shop.wallpaper = wallpaperPath;
+      const wallpaperPath = await this.fileUploadService.createFile(
+        recievedWallpaper,
+      );
+      shop.wallpaper = wallpaperPath.filename;
     }
 
     if (newPassword && oldPassword) {
