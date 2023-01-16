@@ -33,14 +33,7 @@ export class Currency extends Model<Currency, CreateCurrencyAttributes> {
   @ApiProperty({ example: 'Российский рубль (₽)', description: 'Currency' })
   @Field(() => String)
   @Column({
-    type: DataType.ENUM({
-      values: [
-        'Российский рубль (₽)',
-        'Американский доллар ($)',
-        ' Белорусский рубль (Br)',
-        'Армянский драм (֏)',
-      ],
-    }),
+    type: DataType.STRING,
     allowNull: false,
     field: 'currency',
   })
